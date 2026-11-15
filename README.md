@@ -185,16 +185,32 @@ npm run dev
 
 Depois, abra `http://localhost:4173` no navegador. Também é possível abrir `public/index.html` diretamente, mas o servidor local é recomendado para manter o comportamento mais próximo de uma publicação web.
 
+O arquivo `index.html` na raiz é a entrada principal preparada para uma futura publicação no GitHub Pages. Ele encaminha o visitante para a aplicação em `public/`.
+
+## Publicação futura no GitHub Pages
+
+Quando o projeto estiver pronto, a publicação poderá usar a opção **GitHub Actions** nas configurações de Pages. O `index.html` da raiz já está preparado como porta de entrada, enquanto a aplicação completa permanece organizada em `public/`.
+
+Antes de publicar, a dupla deverá conferir os caminhos dos arquivos, testar a navegação e decidir se manterá o redirecionamento para `public/` ou moverá os arquivos finais para a raiz.
+
 ## Estrutura atual
 
 | Caminho | Responsabilidade |
 | --- | --- |
+| `index.html` | Entrada principal da raiz e ponto de entrada para o futuro GitHub Pages |
+| `README.md` | Descrição, regras de colaboração e instruções do projeto |
+| `package.json` | Comandos locais para iniciar o servidor de desenvolvimento |
+| `.gitignore` | Arquivos locais que não devem ser enviados ao GitHub |
 | `public/index.html` | Dashboard, histórico, formulário de leitura e cadastro da residência |
 | `public/styles.css` | Identidade visual, componentes e layout responsivo |
 | `public/app.js` | Estado local, cálculos, gráfico, comparações, validações e alertas |
-| `public/manus-routes.json` | Rotas declaradas da aplicação |
-| `plan.md` | Decisões iniciais e organização técnica |
-| `TODO.md` | Acompanhamento das entregas do MVP |
+| `public/tela-cadastro/index.html` | Estrutura inicial vazia para o cadastro da residência |
+| `public/tela-leituras/index.html` | Estrutura inicial vazia para o registro do hidrômetro |
+| `public/tela-graficos/index.html` | Estrutura inicial vazia para os gráficos |
+| `public/tela-alertas/index.html` | Estrutura inicial vazia para os alertas |
+| `public/tela-historico/index.html` | Estrutura inicial vazia para o histórico e comparações |
+
+As telas específicas estão propositalmente vazias para serem preenchidas pela dupla durante as próximas etapas. Não há banco de dados, backend ou dependência externa obrigatória nesta versão; os dados demonstrativos do MVP ficam no navegador por meio do `localStorage`.
 
 ## Branches para a dupla
 
@@ -218,11 +234,11 @@ Cada integrante deve trabalhar em uma branch de tarefa, abrir um Pull Request pa
 - [x] MVP definido
 - [x] Etapas de desenvolvimento planejadas
 - [x] Divisão inicial da dupla definida
-- [ ] Tecnologias escolhidas
-- [ ] Protótipo criado
-- [ ] Cadastro implementado
-- [ ] Registro e cálculo implementados
-- [ ] Gráficos implementados
-- [ ] Alertas implementados
+- [x] Tecnologias escolhidas
+- [x] Protótipo inicial criado
+- [x] Cadastro demonstrativo implementado
+- [x] Registro e cálculo demonstrativos implementados
+- [x] Gráficos demonstrativos implementados
+- [x] Alertas demonstrativos implementados
 - [ ] Testes concluídos
 - [ ] Apresentação final preparada
