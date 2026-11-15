@@ -173,7 +173,43 @@ O MVP será considerado funcional quando for possível:
 
 ## Tecnologias
 
-As tecnologias serão definidas na etapa de planejamento, considerando o conhecimento da dupla, o prazo disponível e os requisitos do trabalho.
+O MVP inicial foi construído com **HTML, CSS e JavaScript puro**, sem dependências obrigatórias. Os dados ficam salvos no `localStorage` do navegador, permitindo testar o fluxo completo sem backend nesta primeira etapa.
+
+## Como executar
+
+Na raiz do projeto, execute:
+
+```bash
+npm run dev
+```
+
+Depois, abra `http://localhost:4173` no navegador. Também é possível abrir `public/index.html` diretamente, mas o servidor local é recomendado para manter o comportamento mais próximo de uma publicação web.
+
+## Estrutura atual
+
+| Caminho | Responsabilidade |
+| --- | --- |
+| `public/index.html` | Dashboard, histórico, formulário de leitura e cadastro da residência |
+| `public/styles.css` | Identidade visual, componentes e layout responsivo |
+| `public/app.js` | Estado local, cálculos, gráfico, comparações, validações e alertas |
+| `public/manus-routes.json` | Rotas declaradas da aplicação |
+| `plan.md` | Decisões iniciais e organização técnica |
+| `TODO.md` | Acompanhamento das entregas do MVP |
+
+## Branches para a dupla
+
+Para manter a `main` estável, o projeto terá uma branch de integração e branches específicas por funcionalidade:
+
+| Branch | Uso |
+| --- | --- |
+| `main` | Versão estável e demonstrável |
+| `develop` | Integração das funcionalidades antes da entrega |
+| `feature/cadastro-residencia` | Cadastro e edição da residência |
+| `feature/leituras-consumo` | Leituras, cálculo e comparação mensal |
+| `feature/graficos-alertas` | Gráfico de evolução e alertas |
+| `docs/apresentacao` | Documentação e preparação da apresentação |
+
+Cada integrante deve trabalhar em uma branch de tarefa, abrir um Pull Request para `develop` e, após a revisão dos dois integrantes, fazer o merge da versão final em `main`.
 
 ## Status
 

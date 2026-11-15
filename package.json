@@ -1,0 +1,10 @@
+{
+  "name": "projeto-agua",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Água Consciente — monitoramento de consumo de água",
+  "scripts": {
+    "dev": "python3 -m http.server 4173 --directory public",
+    "start": "python3 -m http.server 4173 --directory public"
+  }
+}
