@@ -1,1 +1,1 @@
-{"routes":[{"path":"/","title":"Água Consciente"},{"path":"/index.html","title":"Água Consciente"}]}
+{"routes":[{"path":"/","title":"Água Consciente"},{"path":"/index.html","title":"Água Consciente"},{"path":"/tela-cadastro/","title":"Tela Cadastro"},{"path":"/tela-leituras/","title":"Tela Leituras"},{"path":"/tela-graficos/","title":"Tela Gráficos"},{"path":"/tela-alertas/","title":"Tela Alertas"},{"path":"/tela-historico/","title":"Tela Histórico"}]}
