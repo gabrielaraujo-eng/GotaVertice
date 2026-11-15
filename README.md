@@ -1,8 +1,8 @@
-# Água Consciente — Monitoramento de consumo
+# GotaVértice — Monitoramento de consumo
 
 ## Sobre o projeto
 
-O **Água Consciente** é um sistema de monitoramento de consumo de água desenvolvido como um trabalho em dupla.
+O **GotaVértice** é um sistema de monitoramento de consumo de água desenvolvido como um trabalho em dupla.
 
 A proposta é ajudar famílias a acompanhar o próprio consumo e identificar desperdícios antes que eles apareçam somente na conta de água.
 
