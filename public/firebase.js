@@ -2,8 +2,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/fireba
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import {
@@ -49,6 +51,17 @@ export async function registerAccount(email, password) {
 
 export async function loginAccount(email, password) {
   const credential = await signInWithEmailAndPassword(auth, email, password);
+  return credential.user;
+}
+
+export async function loginWithGoogle() {
+  const credential = await signInWithPopup(auth, new GoogleAuthProvider());
+  await setDoc(doc(db, "users", credential.user.uid), {
+    email: credential.user.email,
+    displayName: credential.user.displayName || "",
+    residence: { name: "Minha residência", residents: 1 },
+    createdAt: serverTimestamp()
+  }, { merge: true });
   return credential.user;
 }
 

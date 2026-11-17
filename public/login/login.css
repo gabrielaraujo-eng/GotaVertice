@@ -47,6 +47,11 @@ input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(73,169,191,.
 .primary-button { background: #f8d78f; color: #2b4c52; gap: 13px; }
 .primary-button:hover { background: #ffe2a4; transform: translateY(-2px); }
 .primary-button span { font-size: 18px; }
+.social-divider { align-items: center; color: #8ba1a4; display: flex; font-size: 11px; gap: 10px; margin: 18px 0 12px; }
+.social-divider::before, .social-divider::after { background: #dce7e7; content: ""; flex: 1; height: 1px; }
+.google-button { align-items: center; background: #fff; border: 1px solid #d5e2e2; border-radius: 8px; color: #2b4c52; cursor: pointer; display: inline-flex; font: inherit; font-size: 12px; font-weight: 700; gap: 10px; justify-content: center; min-height: 45px; transition: .2s ease; width: 100%; }
+.google-button:hover { border-color: #9fc4c5; box-shadow: 0 5px 14px rgba(20, 70, 78, .08); transform: translateY(-2px); }
+.google-icon { align-items: center; border: 1px solid #e1e8e8; border-radius: 50%; color: #4285f4; display: inline-flex; font-family: Arial, sans-serif; font-size: 15px; font-weight: 700; height: 22px; justify-content: center; width: 22px; }
 .account-note { color: var(--ink-soft); font-size: 11px; margin: 26px 0 0; text-align: center; }
 .account-note a { color: var(--blue-deep); font-weight: 700; }
 .security-note { color: var(--muted); font-size: 10px; line-height: 1.5; margin: 24px 0 0; text-align: center; }
