@@ -1,4 +1,9 @@
-import { loginAccount, loginWithGoogle, registerAccount, watchAuth } from "../firebase.js";
+import {
+  loginAccount,
+  loginWithGoogle,
+  registerAccount,
+  watchAuth,
+} from "../firebase.js";
 
 const form = document.querySelector("#loginForm");
 const email = document.querySelector("#email");
@@ -19,24 +24,37 @@ function setFeedback(message, type = "error") {
 
 function friendlyError(error) {
   const messages = {
-    "auth/email-already-in-use": "Este e-mail já possui uma conta. Entre com sua senha.",
+    "auth/email-already-in-use":
+      "Este e-mail já possui uma conta. Entre com sua senha.",
     "auth/invalid-credential": "E-mail ou senha inválidos.",
     "auth/invalid-email": "Informe um e-mail válido.",
     "auth/weak-password": "A senha precisa ter pelo menos oito caracteres.",
-    "auth/too-many-requests": "Muitas tentativas. Aguarde um pouco e tente novamente."
+    "auth/too-many-requests":
+      "Muitas tentativas. Aguarde um pouco e tente novamente.",
   };
-  return messages[error.code] || "Não foi possível concluir o acesso. Tente novamente.";
+  return (
+    messages[error.code] ||
+    "Não foi possível concluir o acesso. Tente novamente."
+  );
 }
 
 function renderMode() {
   const registering = mode === "register";
   formEyebrow.textContent = registering ? "Comece agora" : "Acesse sua conta";
   title.textContent = registering ? "Criar sua conta" : "Entrar no GotaVértice";
-  subtitle.textContent = registering ? "Cadastre-se para acompanhar o consumo da sua residência." : "Entre para continuar acompanhando sua residência.";
+  subtitle.textContent = registering
+    ? "Cadastre-se para acompanhar o consumo da sua residência."
+    : "Entre para continuar acompanhando sua residência.";
   password.autocomplete = registering ? "new-password" : "current-password";
-  password.placeholder = registering ? "Crie uma senha com 8 caracteres" : "Digite sua senha";
-  submitButton.innerHTML = registering ? "Criar conta <span>→</span>" : "Entrar <span>→</span>";
-  accountNote.innerHTML = registering ? "Já possui uma conta? <a href=\"#\" id=\"modeToggle\">Entrar agora</a>" : "Ainda não possui uma conta? <a href=\"#\" id=\"modeToggle\">Criar minha conta</a>";
+  password.placeholder = registering
+    ? "Crie uma senha com 8 caracteres"
+    : "Digite sua senha";
+  submitButton.innerHTML = registering
+    ? "Criar conta <span>→</span>"
+    : "Entrar <span>→</span>";
+  accountNote.innerHTML = registering
+    ? 'Já possui uma conta? <a href="#" id="modeToggle">Entrar agora</a>'
+    : 'Ainda não possui uma conta? <a href="#" id="modeToggle">Criar minha conta</a>';
   document.querySelector("#modeToggle").addEventListener("click", (event) => {
     event.preventDefault();
     mode = registering ? "login" : "register";
@@ -52,9 +70,14 @@ watchAuth((user) => {
 async function submitCredentials() {
   const userEmail = email.value.trim().toLowerCase();
   const userPassword = password.value;
-  if (!userEmail || !userPassword) return setFeedback("Preencha seu e-mail e sua senha para continuar.");
-  if (mode === "register" && userPassword.length < 8) return setFeedback("A senha precisa ter pelo menos oito caracteres.");
-  setFeedback(mode === "register" ? "Criando sua conta..." : "Validando acesso...", "success");
+  if (!userEmail || !userPassword)
+    return setFeedback("Preencha seu e-mail e sua senha para continuar.");
+  if (mode === "register" && userPassword.length < 8)
+    return setFeedback("A senha precisa ter pelo menos oito caracteres.");
+  setFeedback(
+    mode === "register" ? "Criando sua conta..." : "Validando acesso...",
+    "success",
+  );
   try {
     if (mode === "register") await registerAccount(userEmail, userPassword);
     else await loginAccount(userEmail, userPassword);
@@ -72,7 +95,10 @@ form.addEventListener("submit", (event) => {
 document.querySelector("#togglePassword").addEventListener("click", (event) => {
   const showing = password.type === "text";
   password.type = showing ? "password" : "text";
-  event.currentTarget.setAttribute("aria-label", showing ? "Mostrar senha" : "Ocultar senha");
+  event.currentTarget.setAttribute(
+    "aria-label",
+    showing ? "Mostrar senha" : "Ocultar senha",
+  );
 });
 
 document.querySelector("#forgotPassword").addEventListener("click", (event) => {
@@ -86,7 +112,8 @@ document.querySelector("#googleButton").addEventListener("click", async () => {
     await loginWithGoogle();
     window.location.replace("/dashboard");
   } catch (error) {
-    if (error.code === "auth/popup-closed-by-user") return setFeedback("O login do Google foi cancelado.");
+    if (error.code === "auth/popup-closed-by-user")
+      return setFeedback("O login do Google foi cancelado.");
     setFeedback("Não foi possível entrar com o Google. Tente novamente.");
   }
 });

@@ -6,6 +6,11 @@ O projeto possui uma versão web publicada com Firebase Hosting e uma versão lo
 
 > **Dados dos clientes:** não são salvos no GitHub. O frontend usa a configuração pública do Firebase Web, e as regras do Firestore restringem cada usuário ao próprio UID. O SQLite local serve apenas para a execução legada e os testes.
 
+
+## Autoria
+
+Projeto mantido por **Gabriel Lucio** — [@gabrielaraujo-eng](https://github.com/gabrielaraujo-eng).
+
 ## O que a aplicação faz
 
 Depois de criar uma conta, a pessoa pode:
