@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Allow: /login/
+Allow: /privacidade/
+Allow: /cookies/
+Disallow: /dashboard
+Disallow: /app
+Disallow: /api/
+
+Sitemap: https://gotavertice-gj.web.app/sitemap.xml

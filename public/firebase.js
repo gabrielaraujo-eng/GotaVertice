@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
@@ -113,4 +114,13 @@ export async function clearUserData(user) {
   }, { merge: true });
   await batch.commit();
   return loadUserData(user);
+}
+
+export async function deleteAccount(user) {
+  const snapshot = await getDocs(readingsRef(user));
+  const batch = writeBatch(db);
+  snapshot.docs.forEach((item) => batch.delete(item.ref));
+  batch.delete(userRef(user));
+  await batch.commit();
+  await deleteUser(user);
 }
