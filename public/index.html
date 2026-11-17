@@ -17,7 +17,7 @@
     <aside class="sidebar">
       <a class="brand" href="#inicio" aria-label="GotaVértice - início">
         <span class="brand-mark" aria-hidden="true">⌁</span>
-        <span><strong>Água</strong> Consciente</span>
+        <span><strong>Gota</strong>Vértice</span>
       </a>
 
       <div class="sidebar-residence">
@@ -46,7 +46,7 @@
       <header class="topbar">
         <div>
           <p class="eyebrow" id="dashboardDate">Resumo atualizado hoje</p>
-          <h1>Olá, vamos cuidar melhor da água?</h1>
+          <h1>Visão geral da residência</h1>
         </div>
         <div class="topbar-actions">
           <button class="icon-button" type="button" aria-label="Notificações"><span class="notification-dot"></span>♢</button>
@@ -56,9 +56,9 @@
 
       <section class="hero-card" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <span class="status-pill"><span class="pulse"></span> Monitoramento em dia</span>
-          <h2 id="hero-title">Seu consumo está <em>consciente</em>.</h2>
-          <p>Continue acompanhando suas leituras para encontrar oportunidades de economia antes da próxima conta.</p>
+          <span class="status-pill"><span class="pulse"></span> Resumo da sua residência</span>
+          <h2 id="hero-title">Acompanhe suas leituras de água.</h2>
+          <p>Registre as leituras do hidrômetro e veja como o consumo muda ao longo do tempo.</p>
           <a class="primary-button" href="#leituras">Registrar nova leitura <span>→</span></a>
         </div>
         <div class="hero-water" aria-hidden="true">
@@ -81,26 +81,26 @@
           <article class="metric-card featured">
             <div class="metric-icon blue">◒</div>
             <span class="metric-label">Consumo no mês</span>
-            <strong id="currentConsumption">12,4 <small>m³</small></strong>
-            <span class="metric-change positive" id="consumptionChange">↓ 8,2% <b>vs. mês anterior</b></span>
+            <strong id="currentConsumption">— <small>m³</small></strong>
+            <span class="metric-change positive" id="consumptionChange">Aguardando registros</span>
           </article>
           <article class="metric-card">
             <div class="metric-icon green">♧</div>
             <span class="metric-label">Média da residência</span>
-            <strong id="averageConsumption">13,6 <small>m³</small></strong>
-            <span class="metric-change neutral">média dos últimos meses</span>
+            <strong id="averageConsumption">— <small>m³</small></strong>
+            <span class="metric-change neutral">será calculada após os registros</span>
           </article>
           <article class="metric-card">
             <div class="metric-icon amber">♧</div>
             <span class="metric-label">Economia acumulada</span>
-            <strong id="savedConsumption">7,8 <small>m³</small></strong>
-            <span class="metric-change positive">↑ desde o início</span>
+            <strong id="savedConsumption">— <small>m³</small></strong>
+            <span class="metric-change positive">será calculada após os registros</span>
           </article>
           <article class="metric-card alert-card" id="alertMetric">
             <div class="metric-icon coral">!</div>
             <span class="metric-label">Status do consumo</span>
-            <strong id="statusText">Tudo certo</strong>
-            <span class="metric-change neutral" id="statusDetail">Nenhum aumento expressivo</span>
+            <strong id="statusText">Aguardando dados</strong>
+            <span class="metric-change neutral" id="statusDetail">Registre duas leituras</span>
           </article>
         </div>
       </section>
@@ -130,8 +130,8 @@
             </div>
             <span class="insight-spark">↗</span>
           </div>
-          <div class="insight-number"><span id="insightPercent">8,2</span><small>%</small></div>
-          <p>Você consumiu menos água que no mês passado. Se mantiver esse ritmo, pode economizar ainda mais até o fim do ano.</p>
+          <div class="insight-number"><span id="insightPercent">—</span></div>
+          <p>Registre pelo menos duas leituras para comparar este período com o anterior.</p>
           <div class="insight-divider"></div>
           <div class="insight-tip"><span>✦</span><div><strong>Dica do mês</strong><p>Verifique torneiras e descargas. Pequenos vazamentos podem desperdiçar centenas de litros.</p></div></div>
         </article>
@@ -179,7 +179,7 @@
         </div>
       </section>
 
-      <footer class="page-footer">GotaVértice <span>·</span> Monitorar hoje para economizar amanhã. <span>·</span> <a href="/privacidade/">Privacidade</a> <span>·</span> <a href="/cookies/">Cookies</a></footer>
+      <footer class="page-footer">GotaVértice <span>·</span> Registros da sua residência. <span>·</span> <a href="/privacidade/">Privacidade</a> <span>·</span> <a href="/cookies/">Cookies</a></footer>
     </main>
   </div>
   <div class="toast" id="toast" role="status"></div>
