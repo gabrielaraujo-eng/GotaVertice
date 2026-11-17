@@ -2,7 +2,9 @@
 
 Aplicação web para acompanhar o consumo de água de uma residência, identificar aumentos fora do padrão e tomar decisões para reduzir desperdícios.
 
-O projeto possui frontend, servidor, API, autenticação persistente e banco de dados. Cada pessoa cria a própria conta, cadastra a residência e registra as leituras do hidrômetro. Os dados ficam associados à conta e continuam disponíveis quando o servidor é reiniciado.
+O projeto possui uma versão web publicada com Firebase Hosting e uma versão local full-stack com servidor Node.js, API, autenticação persistente e banco SQLite. A versão web publica os arquivos estáticos de `public/`; o backend local continua disponível para desenvolvimento e testes.
+
+> **Versão web:** o Firebase Hosting publica somente a pasta `public/`. O arquivo `server.js`, o SQLite e as rotas `/api/*` não são executados pelo Hosting clássico. Por isso, a interface pode ser publicada agora, mas cadastro, login e persistência online exigem uma etapa posterior de migração para Firebase Authentication, Firestore e Functions ou outro backend.
 
 ## O que a aplicação faz
 
@@ -16,6 +18,21 @@ Depois de criar uma conta, a pessoa pode:
 - exportar os próprios dados em JSON;
 - limpar os dados da residência com confirmação;
 - sair da conta e encerrar a sessão no servidor.
+
+## Publicação da versão web
+
+A publicação é feita a partir da raiz deste repositório, mas o conteúdo enviado pelo Firebase Hosting vem somente de `public/`. O arquivo `firebase.json` deve conter `"public": "public"`.
+
+Depois de instalar e autenticar o Firebase CLI, execute:
+
+```bash
+firebase init hosting
+firebase deploy --only hosting
+```
+
+Durante o `firebase init hosting`, selecione o projeto Firebase correto, use `public` como diretório público e responda **No** para configuração de aplicação de página única. O deploy cria uma URL `*.web.app`.
+
+O repositório inteiro pode permanecer no GitHub. Arquivos como `server.js`, `data/`, `tests/`, `Dockerfile` e `package.json` continuam úteis para desenvolvimento local, testes, Docker e uma futura hospedagem do backend, mas não são enviados como conteúdo do Hosting quando `public` é o diretório configurado.
 
 ## Requisitos
 
@@ -111,6 +128,7 @@ A rota `GET /healthz` responde com o estado do serviço e pode ser usada por uma
 | Testes | `tests/` | Regras de consumo e integração do servidor |
 | Rotas | `public/manus-routes.json` | Páginas navegáveis da aplicação |
 | Container | `Dockerfile` | Execução do servidor em uma imagem Node 22 |
+| Web | `firebase.json` + `public/` | Publicação dos arquivos estáticos no Firebase Hosting |
 
 O banco local é ignorado pelo Git. O arquivo `data/.gitkeep` mantém a pasta no repositório, mas nenhum dado pessoal é enviado para o GitHub.
 
