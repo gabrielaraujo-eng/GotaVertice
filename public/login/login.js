@@ -1,4 +1,4 @@
-import { loginAccount, registerAccount, watchAuth } from "../firebase.js";
+import { loginAccount, loginWithGoogle, registerAccount, watchAuth } from "../firebase.js";
 
 const form = document.querySelector("#loginForm");
 const email = document.querySelector("#email");
@@ -77,6 +77,17 @@ document.querySelector("#togglePassword").addEventListener("click", (event) => {
 document.querySelector("#forgotPassword").addEventListener("click", (event) => {
   event.preventDefault();
   setFeedback("A recuperação de senha será adicionada em uma próxima etapa.");
+});
+
+document.querySelector("#googleButton").addEventListener("click", async () => {
+  setFeedback("Abrindo o login do Google...", "success");
+  try {
+    await loginWithGoogle();
+    window.location.replace("/dashboard");
+  } catch (error) {
+    if (error.code === "auth/popup-closed-by-user") return setFeedback("O login do Google foi cancelado.");
+    setFeedback("Não foi possível entrar com o Google. Tente novamente.");
+  }
 });
 
 renderMode();
