@@ -43,17 +43,13 @@ input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(73,169,191,.
 .password-field button { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 13px; padding: 10px; position: absolute; right: 3px; top: 1px; }
 .form-feedback { color: var(--coral); font-size: 11px; min-height: 17px; margin: -4px 0 5px; }
 .form-feedback.success { color: var(--green); }
-.primary-button, .demo-button { align-items: center; border: 0; border-radius: 8px; cursor: pointer; display: inline-flex; font: inherit; font-size: 12px; font-weight: 700; justify-content: center; min-height: 45px; transition: .2s ease; width: 100%; }
+.primary-button { align-items: center; border: 0; border-radius: 8px; cursor: pointer; display: inline-flex; font: inherit; font-size: 12px; font-weight: 700; justify-content: center; min-height: 45px; transition: .2s ease; width: 100%; }
 .primary-button { background: #f8d78f; color: #2b4c52; gap: 13px; }
 .primary-button:hover { background: #ffe2a4; transform: translateY(-2px); }
 .primary-button span { font-size: 18px; }
-.divider { align-items: center; color: var(--muted); display: flex; font-size: 10px; gap: 12px; margin: 24px 0 17px; }
-.divider::before, .divider::after { background: var(--line); content: ""; flex: 1; height: 1px; }
-.demo-button { background: var(--blue-soft); color: var(--blue-deep); }
-.demo-button:hover { background: #d5edef; }
 .account-note { color: var(--ink-soft); font-size: 11px; margin: 26px 0 0; text-align: center; }
 .account-note a { color: var(--blue-deep); font-weight: 700; }
-.prototype-note { color: var(--muted); font-size: 10px; line-height: 1.5; margin: 24px 0 0; text-align: center; }
+.security-note { color: var(--muted); font-size: 10px; line-height: 1.5; margin: 24px 0 0; text-align: center; }
 .mobile-brand { display: none; }
 @media (max-width: 820px) {
   .login-shell { display: block; }

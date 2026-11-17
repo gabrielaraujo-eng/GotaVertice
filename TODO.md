@@ -5,12 +5,12 @@
 - O servidor deve criar o banco SQLite e o schema necessários sem apagar dados existentes.
 - Usuários, residência e leituras devem sobreviver ao reinício do servidor.
 
-## [ ] Autenticação persistente
+## [x] Autenticação persistente
 - Um login válido deve criar uma sessão no servidor.
 - A sessão deve ser mantida em cookie HttpOnly e não em `localStorage`.
 - Usuários não autenticados devem ser redirecionados para o login.
 - Logout deve invalidar a sessão no servidor.
-- A conta de demonstração deve continuar disponível para apresentação local.
+- O cadastro deve criar uma conta e uma residência inicial para a pessoa usuária.
 
 ## [ ] Dashboard conectado à API
 - O dashboard deve carregar residência e leituras da API.
@@ -22,5 +22,5 @@
 ## [ ] Qualidade e documentação
 - `npm test` deve continuar cobrindo as regras de consumo.
 - O servidor deve ter verificações de saúde e respostas JSON consistentes.
-- O README deve explicar instalação, execução, credenciais de demonstração e limites do armazenamento local.
+- O README deve explicar instalação, criação de conta, execução e limites do armazenamento local.
 - A rota `/manus-routes.json` deve declarar as páginas navegáveis da aplicação.

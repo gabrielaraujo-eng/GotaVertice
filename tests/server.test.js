@@ -9,6 +9,7 @@ const base = `http://127.0.0.1:${port}`;
 let server;
 let cookie;
 const testDatabase = path.join(os.tmpdir(), `gotavertice-test-${process.pid}.sqlite`);
+const userEmail = `usuario-${process.pid}@example.com`;
 
 async function request(path, options = {}) {
   const headers = { ...(options.headers || {}) };
@@ -47,21 +48,27 @@ test('recusa dashboard sem sessão', async () => {
   assert.equal(response.status, 401);
 });
 
-test('faz login de demonstração e carrega dados persistidos', async () => {
-  const login = await request('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'demo@gotavertice.com', password: 'agua123' }) });
-  assert.equal(login.status, 200);
+test('cria uma conta e carrega a residência criada no servidor', async () => {
+  const register = await request('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: userEmail, password: 'senha-segura' }) });
+  assert.equal(register.status, 201);
   const dashboard = await request('/api/dashboard');
   const payload = await dashboard.json();
   assert.equal(dashboard.status, 200);
   assert.equal(payload.residence.name, 'Minha residência');
-  assert.ok(Array.isArray(payload.readings));
+  assert.equal(payload.residence.residents, 1);
+  assert.deepEqual(payload.readings, []);
+});
+
+test('recusa cadastro com e-mail repetido', async () => {
+  const response = await request('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: userEmail, password: 'outra-senha' }) });
+  assert.equal(response.status, 409);
 });
 
 test('mantém a sessão após uma alteração de residência', async () => {
-  const response = await request('/api/residence', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'Casa de demonstração', residents: 3 }) });
+  const response = await request('/api/residence', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'Casa da família', residents: 3 }) });
   const payload = await response.json();
   assert.equal(response.status, 200);
-  assert.equal(payload.residence.name, 'Casa de demonstração');
+  assert.equal(payload.residence.name, 'Casa da família');
   assert.equal(payload.residence.residents, 3);
   await request('/api/data', { method: 'DELETE' });
 });

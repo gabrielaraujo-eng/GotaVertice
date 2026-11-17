@@ -1,314 +1,196 @@
-# GotaVértice — Monitoramento de consumo
+# GotaVértice
 
-## Sobre o projeto
+Aplicação web para acompanhar o consumo de água de uma residência, identificar aumentos fora do padrão e tomar decisões para reduzir desperdícios.
 
-O **GotaVértice** é um sistema de monitoramento de consumo de água desenvolvido como um trabalho em dupla.
+O projeto possui frontend, servidor, API, autenticação persistente e banco de dados. Cada pessoa cria a própria conta, cadastra a residência e registra as leituras do hidrômetro. Os dados ficam associados à conta e continuam disponíveis quando o servidor é reiniciado.
 
-A proposta é ajudar famílias a acompanhar o próprio consumo e identificar desperdícios antes que eles apareçam somente na conta de água.
+## O que a aplicação faz
 
-## Problema
+Depois de criar uma conta, a pessoa pode:
 
-Muitas famílias não acompanham regularmente o consumo de água da residência. Como consequência, aumentos expressivos e possíveis desperdícios costumam ser percebidos apenas quando a conta chega.
+- cadastrar o nome da residência e o número de moradores;
+- registrar leituras do hidrômetro com data e valor em m³;
+- acompanhar o consumo calculado entre duas leituras;
+- visualizar histórico, gráfico e comparação mensal;
+- receber um alerta quando o consumo sobe mais de 20% em relação ao período anterior;
+- exportar os próprios dados em JSON;
+- limpar os dados da residência com confirmação;
+- sair da conta e encerrar a sessão no servidor.
 
-## Solução
+## Requisitos
 
-O sistema permitirá registrar as leituras mensais do hidrômetro, calcular o consumo do período e acompanhar a evolução do gasto de água por meio de gráficos e comparações entre meses.
+Para executar o projeto, instale:
 
-## Objetivo
+- **Node.js 22 ou superior** — o projeto usa o SQLite nativo disponível nessa versão;
+- **Git** — para baixar o código;
+- um navegador atualizado, como Chrome, Edge, Firefox ou Safari.
 
-Criar uma aplicação simples e fácil de usar que ajude os moradores a:
-
-- acompanhar o consumo mensal de água;
-- identificar aumentos expressivos no consumo;
-- comparar o consumo entre diferentes meses;
-- perceber possíveis desperdícios com antecedência;
-- tomar decisões para reduzir o consumo.
-
-## Funcionalidades do MVP
-
-O MVP, ou versão inicial do sistema, terá as seguintes funcionalidades:
-
-1. **Cadastro de residência**
-   - Nome ou identificação da residência;
-   - Endereço ou uma identificação simplificada;
-   - Quantidade de moradores, se necessário para análises futuras.
-
-2. **Registro mensal do hidrômetro**
-   - Data da leitura;
-   - Valor registrado no hidrômetro;
-   - Possibilidade de consultar os registros anteriores.
-
-3. **Cálculo do consumo**
-   - Consumo mensal calculado pela diferença entre a leitura atual e a leitura anterior;
-   - Exibição do resultado em metros cúbicos (m³).
-
-4. **Gráfico de evolução**
-   - Visualização do consumo ao longo dos meses;
-   - Identificação visual de períodos de aumento ou redução.
-
-5. **Comparação entre meses**
-   - Comparação do consumo do mês atual com o mês anterior;
-   - Exibição da diferença em m³ e, se possível, em porcentagem.
-
-6. **Alertas de aumento expressivo**
-   - Aviso quando o consumo aumentar acima de um limite definido;
-   - Mensagem de orientação para verificar possíveis vazamentos ou desperdícios.
-
-## Etapas do desenvolvimento
-
-O projeto será desenvolvido em etapas para facilitar a organização do trabalho em dupla.
-
-### Etapa 1 — Planejamento
-
-- Definir o objetivo e o público-alvo;
-- Levantar os requisitos do sistema;
-- Definir o escopo do MVP;
-- Escolher as tecnologias que serão utilizadas;
-- Criar o cronograma e dividir as tarefas entre a dupla.
-
-### Etapa 2 — Modelagem e prototipação
-
-- Modelar os dados da residência e das leituras;
-- Definir as telas principais;
-- Criar o fluxo de navegação;
-- Elaborar um protótipo simples da interface;
-- Definir a regra de cálculo do consumo e dos alertas.
-
-### Etapa 3 — Implementação do cadastro
-
-- Criar o cadastro da residência;
-- Implementar o armazenamento dos dados;
-- Criar as telas ou formulários necessários;
-- Validar os campos preenchidos pelo usuário.
-
-### Etapa 4 — Implementação das leituras e cálculos
-
-- Criar o registro mensal do hidrômetro;
-- Implementar o cálculo automático do consumo;
-- Exibir o histórico de leituras;
-- Implementar a comparação entre meses.
-
-### Etapa 5 — Gráficos e alertas
-
-- Criar o gráfico de evolução do consumo;
-- Definir o que será considerado um aumento expressivo;
-- Implementar os alertas;
-- Melhorar a clareza das informações apresentadas.
-
-### Etapa 6 — Testes e ajustes
-
-- Testar o cadastro de residências;
-- Testar leituras em sequência;
-- Verificar cálculos com diferentes valores;
-- Testar aumentos e reduções de consumo;
-- Corrigir erros e ajustar a interface.
-
-### Etapa 7 — Documentação e apresentação
-
-- Finalizar o README;
-- Registrar as decisões do projeto;
-- Preparar exemplos de uso;
-- Dividir a apresentação entre os dois integrantes;
-- Demonstrar o funcionamento do MVP.
-
-### Etapa 8 — Acesso e evolução do produto
-
-- Criar a tela de login responsiva;
-- Proteger o dashboard com uma sessão local de demonstração;
-- Preparar a integração futura com autenticação no backend;
-- Evoluir o cadastro e as permissões por residência.
-
-## Organização do trabalho em dupla
-
-O projeto será realizado por **dois integrantes**, com divisão de responsabilidades e colaboração nas decisões importantes. A divisão abaixo é uma sugestão inicial e pode ser ajustada conforme a necessidade do projeto.
-
-### Integrante 1 — Dados e regras de negócio
-
-- Modelagem dos dados;
-- Cadastro da residência;
-- Registro das leituras do hidrômetro;
-- Cálculo do consumo mensal;
-- Comparação entre meses;
-- Implementação dos alertas;
-- Testes das funcionalidades e dos cálculos.
-
-### Integrante 2 — Interface e visualização
-
-- Prototipação das telas;
-- Desenvolvimento da interface;
-- Tela de dashboard ou resumo do consumo;
-- Criação dos gráficos;
-- Organização da experiência de uso;
-- Ajustes visuais e responsividade;
-- Apoio na documentação e na apresentação.
-
-### Responsabilidades compartilhadas
-
-Os dois integrantes deverão participar de:
-
-- planejamento e definição do escopo;
-- escolha das tecnologias;
-- revisão do código;
-- testes gerais do sistema;
-- correção de problemas;
-- documentação;
-- apresentação final do projeto.
-
-A divisão de tarefas não significa que cada integrante trabalhará isoladamente. As funcionalidades deverão ser integradas e revisadas em conjunto para garantir que o resultado final seja consistente.
-
-## Fluxo básico de uso
-
-1. O usuário cadastra a residência.
-2. O usuário registra a primeira leitura do hidrômetro.
-3. No mês seguinte, registra uma nova leitura.
-4. O sistema calcula automaticamente o consumo do período.
-5. O usuário visualiza o histórico e o gráfico de evolução.
-6. O sistema compara o consumo com meses anteriores.
-7. Caso exista um aumento expressivo, o sistema apresenta um alerta.
-
-## Critérios de sucesso do MVP
-
-O MVP será considerado funcional quando for possível:
-
-- cadastrar uma residência;
-- registrar pelo menos duas leituras do hidrômetro;
-- calcular corretamente o consumo entre as leituras;
-- visualizar a evolução do consumo em um gráfico;
-- comparar o mês atual com outro mês;
-- exibir um alerta quando houver aumento expressivo;
-- utilizar o sistema de forma simples e compreensível.
-
-## Tecnologias
-
-O frontend continua usando **HTML, CSS e JavaScript puro**, sem framework obrigatório. A aplicação agora possui servidor Node.js, API, sessões HttpOnly e SQLite; o `localStorage` não é mais a fonte de verdade para autenticação ou dados da residência.
-
-## Como executar
-
-Na raiz do projeto, execute:
+Você pode conferir a versão do Node com:
 
 ```bash
-npm run dev
+node --version
 ```
 
-Depois, abra `http://localhost:4173` no navegador. Também é possível abrir `public/index.html` diretamente, mas o servidor local é recomendado para manter o comportamento mais próximo de uma publicação web.
+Se o comando retornar uma versão menor que `v22`, atualize o Node antes de continuar.
 
-O arquivo `index.html` na raiz é a entrada principal preparada para uma futura publicação no GitHub Pages. Ele encaminha o visitante para a aplicação em `public/`.
+## Instalação para quem está começando
 
-## Publicação futura no GitHub Pages
+### 1. Baixe o projeto
 
-Quando o projeto estiver pronto, a publicação poderá usar a opção **GitHub Actions** nas configurações de Pages. O `index.html` da raiz já está preparado como porta de entrada, enquanto a aplicação completa permanece organizada em `public/`.
+Abra um terminal e execute:
 
-Antes de publicar, a dupla deverá conferir os caminhos dos arquivos, testar a navegação e decidir se manterá o redirecionamento para `public/` ou moverá os arquivos finais para a raiz.
+```bash
+git clone https://github.com/gabrielaraujo-eng/GotaVertice.git
+cd GotaVertice
+```
 
-## Estrutura atual
+Se você já recebeu a pasta do projeto, entre nela com `cd` e pule o primeiro comando.
 
-| Caminho | Responsabilidade |
-| --- | --- |
-| `index.html` | Entrada principal da raiz e ponto de entrada para o futuro GitHub Pages |
-| `README.md` | Descrição, regras de colaboração e instruções do projeto |
-| `package.json` | Comandos locais para iniciar o servidor de desenvolvimento |
-| `.gitignore` | Arquivos locais que não devem ser enviados ao GitHub |
-| `public/index.html` | Dashboard, histórico, formulário de leitura e cadastro da residência |
-| `public/styles.css` | Identidade visual, componentes e layout responsivo |
-| `public/app.js` | Estado local, cálculos, gráfico, comparações, validações e alertas |
-| `public/login/index.html` | Tela de login e entrada para o próximo estágio do produto |
-| `public/login/login.css` | Identidade visual responsiva da tela de acesso |
-| `public/login/login.js` | Validação e sessão local de demonstração |
-| `public/tela-cadastro/index.html` | Estrutura inicial vazia para o cadastro da residência |
-| `public/tela-leituras/index.html` | Estrutura inicial vazia para o registro do hidrômetro |
-| `public/tela-graficos/index.html` | Estrutura inicial vazia para os gráficos |
-| `public/tela-alertas/index.html` | Estrutura inicial vazia para os alertas |
-| `public/tela-historico/index.html` | Estrutura inicial vazia para o histórico e comparações |
+### 2. Instale a preparação do projeto
 
-As telas específicas antigas permanecem como referências de organização. O fluxo principal usa o dashboard e o login servidos pelo backend; o banco SQLite local é criado automaticamente e o arquivo é ignorado pelo Git.
-
-## Branches para a dupla
-
-Para manter a `main` estável, o projeto terá uma branch de integração e branches específicas por funcionalidade:
-
-| Branch | Uso |
-| --- | --- |
-| `main` | Versão estável e demonstrável |
-| `develop` | Integração das funcionalidades antes da entrega |
-| `feature/cadastro-residencia` | Cadastro e edição da residência |
-| `feature/leituras-consumo` | Leituras, cálculo e comparação mensal |
-| `feature/graficos-alertas` | Gráfico de evolução e alertas |
-| `docs/apresentacao` | Documentação e preparação da apresentação |
-
-Cada integrante deve trabalhar em uma branch de tarefa, abrir um Pull Request para `develop` e, após a revisão dos dois integrantes, fazer o merge da versão final em `main`.
-
-## Status
-
-- [x] Ideia definida
-- [x] Problema e solução descritos
-- [x] MVP definido
-- [x] Etapas de desenvolvimento planejadas
-- [x] Divisão inicial da dupla definida
-- [x] Tecnologias escolhidas
-- [x] Protótipo inicial criado
-- [x] Cadastro demonstrativo implementado
-- [x] Registro e cálculo demonstrativos implementados
-- [x] Gráficos demonstrativos implementados
-- [x] Alertas demonstrativos implementados
-- [x] Tela de login e sessão local de demonstração implementadas
-- [ ] Testes concluídos
-- [ ] Apresentação final preparada
-
-## Arquitetura da aplicação web
-
-O projeto deixou de depender apenas de uma página estática e agora possui um servidor Node.js com API, autenticação por sessão e persistência em SQLite. O navegador não grava mais residência, leituras ou sessão no `localStorage`: esses dados são carregados e salvos no servidor para o usuário autenticado.
-
-### Executar localmente
-
-Requer Node.js 22 ou superior, pois o projeto usa o módulo SQLite nativo do Node.
+O projeto não depende de bibliotecas externas para funcionar, mas este comando prepara o ambiente padrão do Node:
 
 ```bash
 npm install
+```
+
+### 3. Inicie o servidor
+
+```bash
 npm run dev
 ```
 
-Acesse `http://localhost:4173`. O servidor também expõe `GET /healthz` para verificar a disponibilidade.
+Quando aparecer uma mensagem informando que o GotaVértice está disponível, abra no navegador:
 
-### Acesso de demonstração
+<http://localhost:4173>
 
-- E-mail: `demo@gotavertice.com`
-- Senha: `agua123`
+Mantenha o terminal aberto enquanto usa a aplicação. Para parar o servidor, pressione `Ctrl+C`.
 
-A conta é criada automaticamente na primeira inicialização. Em ambiente de produção, a senha deve ser substituída por um fluxo de cadastro e secrets gerenciados.
+## Primeiro acesso
 
-### Camadas principais
+Ao abrir a aplicação, selecione **Criar minha conta**. Informe um e-mail válido e uma senha com pelo menos oito caracteres. O cadastro cria automaticamente uma residência inicial chamada “Minha residência”.
 
-| Camada | Arquivos | Responsabilidade |
+Depois do cadastro, o sistema abre o dashboard. Entre em **Residência** para trocar o nome e informar a quantidade correta de moradores. Em seguida, use **Nova leitura** para registrar o valor do hidrômetro.
+
+O consumo só pode ser calculado quando houver pelo menos duas leituras. O valor da leitura seguinte precisa ser igual ou maior que a anterior, porque o hidrômetro acumula o consumo. Se você corrigir uma leitura intermediária, ela também precisa permanecer entre as leituras vizinhas.
+
+## Como usar o dashboard
+
+O cartão **Consumo no mês** mostra a diferença entre as duas últimas leituras. **Média da residência** calcula a média dos períodos registrados. **Economia acumulada** compara cada período com uma meta de 15 m³. O cartão **Status do consumo** indica se houve uma alta expressiva.
+
+O gráfico mostra até os seis períodos mais recentes. A linha tracejada representa a média recomendada. A tabela abaixo apresenta a leitura, o consumo calculado e a situação de cada período.
+
+Em **Sua residência**, o botão de exportação baixa um arquivo JSON com a residência e as leituras da conta atual. O botão de limpeza remove somente os dados dessa residência e pede confirmação antes de executar a operação.
+
+## Comandos disponíveis
+
+```bash
+npm run dev    # inicia o servidor para desenvolvimento
+npm start      # inicia o servidor como processo de aplicação
+npm test       # executa todos os testes automatizados
+```
+
+O servidor aceita a variável `PORT`. Por exemplo:
+
+```bash
+PORT=3000 npm start
+```
+
+A rota `GET /healthz` responde com o estado do serviço e pode ser usada por uma plataforma de hospedagem para verificar se a aplicação está funcionando.
+
+## Arquitetura
+
+| Camada | Arquivo ou pasta | Responsabilidade |
 | --- | --- | --- |
-| Servidor | `server.js` | HTTP, arquivos estáticos, API, cookies e autenticação |
-| Banco | `server.js`, `data/` | SQLite com usuários, sessões, residência e leituras |
-| Frontend | `public/app.js` | Dashboard conectado aos endpoints da API |
-| Login | `public/login/login.js` | Login real via `fetch` e sessão HttpOnly |
-| Domínio | `public/consumption.js` | Ordenação, consumo, média, alertas e economia |
-| Qualidade | `tests/` | Testes de domínio e integração do servidor |
+| Servidor | `server.js` | HTTP, arquivos estáticos, rotas da API, cookies e autenticação |
+| Banco | `data/gotavertice.sqlite` | Usuários, sessões, residências e leituras; criado automaticamente |
+| Login | `public/login/` | Entrar e criar conta pela API |
+| Dashboard | `public/index.html`, `public/app.js` | Interface e chamadas para o servidor |
+| Regras | `public/consumption.js` | Ordenação, consumo, média, alertas e economia |
+| Estilos | `public/styles.css`, `public/login/login.css` | Identidade visual, responsividade e foco acessível |
+| Testes | `tests/` | Regras de consumo e integração do servidor |
+| Rotas | `public/manus-routes.json` | Páginas navegáveis da aplicação |
+| Container | `Dockerfile` | Execução do servidor em uma imagem Node 22 |
 
-### Endpoints essenciais
+O banco local é ignorado pelo Git. O arquivo `data/.gitkeep` mantém a pasta no repositório, mas nenhum dado pessoal é enviado para o GitHub.
 
-- `POST /api/auth/login` cria uma sessão com cookie HttpOnly.
-- `GET /api/auth/session` verifica a sessão atual.
-- `POST /api/auth/logout` invalida a sessão.
-- `GET /api/dashboard` retorna residência e leituras do usuário.
-- `PUT /api/residence` atualiza a residência autenticada.
-- `POST /api/readings` cria ou corrige uma leitura respeitando a ordem do hidrômetro.
-- `DELETE /api/data` limpa apenas os dados da residência autenticada.
+## API principal
 
-### Testes
+Todas as rotas abaixo, exceto `/healthz` e as rotas de autenticação, exigem uma sessão válida:
+
+| Método | Rota | Função |
+| --- | --- | --- |
+| `POST` | `/api/auth/register` | Cria uma conta e a residência inicial |
+| `POST` | `/api/auth/login` | Valida e-mail e senha e cria uma sessão |
+| `GET` | `/api/auth/session` | Verifica a sessão atual |
+| `POST` | `/api/auth/logout` | Invalida a sessão no servidor |
+| `GET` | `/api/dashboard` | Retorna residência e leituras da conta |
+| `PUT` | `/api/residence` | Atualiza os dados da residência |
+| `POST` | `/api/readings` | Cria ou atualiza uma leitura validada |
+| `DELETE` | `/api/data` | Remove os dados da residência autenticada |
+| `GET` | `/healthz` | Verifica se o servidor está disponível |
+
+As senhas nunca são salvas em texto puro. O servidor usa `scrypt` para derivar um hash e armazena uma sessão aleatória em cookie `HttpOnly`. A API filtra cada consulta pelo usuário autenticado.
+
+## Testes
+
+Execute:
 
 ```bash
 npm test
 ```
 
-A suíte cobre as regras de consumo e o fluxo de autenticação, isolamento de sessão, carregamento do dashboard e persistência da residência.
+A suíte verifica as regras de ordenação e cálculo, o bloqueio de acesso sem sessão, o cadastro, a rejeição de e-mails repetidos, a atualização da residência e a persistência do fluxo autenticado. Os testes de integração usam um banco temporário separado para não alterar dados de desenvolvimento.
 
-### Execução em container
+## Solução de problemas
 
-O `Dockerfile` executa o mesmo servidor na porta `3000`. O SQLite dentro do container é adequado para desenvolvimento ou instâncias únicas; em produção compartilhada, use volume persistente ou migre para um banco gerenciado antes de publicar.
+### “Node.js precisa ser atualizado”
 
-### Limite atual de produção
+Instale o Node.js 22 ou superior e abra um novo terminal. Depois confira novamente com `node --version`.
 
-A base já funciona como aplicação web full-stack local e está preparada para deploy como servidor. Para publicação compartilhada, o próximo passo operacional é trocar o SQLite local por um banco gerenciado, configurar secrets, HTTPS e a política de cookies do ambiente publicado. O arquivo do banco local permanece ignorado pelo Git.
+### A porta 4173 já está em uso
+
+Inicie em outra porta:
+
+```bash
+PORT=3000 npm run dev
+```
+
+Depois abra <http://localhost:3000>.
+
+### A página não abre
+
+Confirme se o terminal ainda está executando `npm run dev`, se você está usando o endereço `localhost` correto e se nenhuma mensagem de erro apareceu no terminal. Acesse `/healthz` para separar um problema do servidor de um problema do navegador.
+
+### Esqueci a senha
+
+O fluxo de recuperação por e-mail ainda não está configurado. Em ambiente local, a conta fica no arquivo SQLite da pasta `data`. Para recomeçar com um banco vazio, pare o servidor e remova esse arquivo; essa ação apaga todas as contas e leituras locais.
+
+## Execução com Docker
+
+A imagem usa Node 22 e inicia o mesmo servidor na porta 3000:
+
+```bash
+docker build -t gotavertice .
+docker run --rm -p 3000:3000 -v gotavertice-data:/app/data gotavertice
+```
+
+O volume é importante para manter o banco depois que o container for encerrado. Para uma publicação com várias instâncias, substitua o SQLite local por um banco gerenciado.
+
+## Desenvolvimento e colaboração
+
+A branch `main` contém a versão estável. Use uma branch curta para cada mudança, com nomes como `feature/cadastro-usuarios`, `fix/validacao-leituras` ou `docs/tutorial`. Faça commits semânticos, execute `npm test`, abra um Pull Request para `develop` e só depois promova a integração para `main`.
+
+Antes de abrir um Pull Request, confira:
+
+```bash
+node --check server.js
+node --check public/app.js
+node --check public/login/login.js
+npm test
+git diff --check
+```
+
+## Próximas evoluções
+
+As próximas melhorias naturais são recuperação de senha por e-mail, edição de perfil, múltiplas residências por conta, banco gerenciado para produção, proteção contra tentativas repetidas de login, logs estruturados e publicação com HTTPS. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.
