@@ -1,8 +1,8 @@
-# Água Consciente — Monitoramento de consumo
+# GotaVértice — Monitoramento de consumo
 
 ## Sobre o projeto
 
-O **Água Consciente** é um sistema de monitoramento de consumo de água desenvolvido como um trabalho em dupla.
+O **GotaVértice** é um sistema de monitoramento de consumo de água desenvolvido como um trabalho em dupla.
 
 A proposta é ajudar famílias a acompanhar o próprio consumo e identificar desperdícios antes que eles apareçam somente na conta de água.
 
@@ -111,6 +111,13 @@ O projeto será desenvolvido em etapas para facilitar a organização do trabalh
 - Dividir a apresentação entre os dois integrantes;
 - Demonstrar o funcionamento do MVP.
 
+### Etapa 8 — Acesso e evolução do produto
+
+- Criar a tela de login responsiva;
+- Proteger o dashboard com uma sessão local de demonstração;
+- Preparar a integração futura com autenticação no backend;
+- Evoluir o cadastro e as permissões por residência.
+
 ## Organização do trabalho em dupla
 
 O projeto será realizado por **dois integrantes**, com divisão de responsabilidades e colaboração nas decisões importantes. A divisão abaixo é uma sugestão inicial e pode ser ajustada conforme a necessidade do projeto.
@@ -204,6 +211,9 @@ Antes de publicar, a dupla deverá conferir os caminhos dos arquivos, testar a n
 | `public/index.html` | Dashboard, histórico, formulário de leitura e cadastro da residência |
 | `public/styles.css` | Identidade visual, componentes e layout responsivo |
 | `public/app.js` | Estado local, cálculos, gráfico, comparações, validações e alertas |
+| `public/login/index.html` | Tela de login e entrada para o próximo estágio do produto |
+| `public/login/login.css` | Identidade visual responsiva da tela de acesso |
+| `public/login/login.js` | Validação e sessão local de demonstração |
 | `public/tela-cadastro/index.html` | Estrutura inicial vazia para o cadastro da residência |
 | `public/tela-leituras/index.html` | Estrutura inicial vazia para o registro do hidrômetro |
 | `public/tela-graficos/index.html` | Estrutura inicial vazia para os gráficos |
@@ -240,5 +250,6 @@ Cada integrante deve trabalhar em uma branch de tarefa, abrir um Pull Request pa
 - [x] Registro e cálculo demonstrativos implementados
 - [x] Gráficos demonstrativos implementados
 - [x] Alertas demonstrativos implementados
+- [x] Tela de login e sessão local de demonstração implementadas
 - [ ] Testes concluídos
 - [ ] Apresentação final preparada

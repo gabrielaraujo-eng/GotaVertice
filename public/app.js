@@ -1,4 +1,9 @@
 const STORAGE_KEY = 'agua-consciente-state';
+const SESSION_KEY = 'agua-consciente-session';
+
+if (!localStorage.getItem(SESSION_KEY)) {
+  window.location.replace('login/index.html');
+}
 
 const defaultState = {
   residence: { name: 'Minha residência', residents: 2 },
@@ -195,5 +200,10 @@ document.querySelectorAll('.nav-link').forEach((link) => link.addEventListener('
   document.querySelectorAll('.nav-link').forEach((item) => item.classList.remove('active'));
   link.classList.add('active');
 }));
+
+$('#logoutButton')?.addEventListener('click', () => {
+  localStorage.removeItem(SESSION_KEY);
+  window.location.href = 'login/index.html';
+});
 
 render();
