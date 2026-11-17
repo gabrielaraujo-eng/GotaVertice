@@ -3,10 +3,13 @@
   "version": "2.0.0",
   "private": true,
   "description": "GotaVértice — aplicação web para monitoramento de consumo de água",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "test": "node --test tests/consumption.test.js tests/server.test.js",
     "dev": "node server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test:smoke": "bash scripts/smoke-test.sh"
   }
 }

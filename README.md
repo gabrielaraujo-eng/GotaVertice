@@ -150,6 +150,16 @@ Todas as rotas abaixo, exceto `/healthz` e as rotas de autenticação, exigem um
 
 As senhas nunca são salvas em texto puro. O servidor usa `scrypt` para derivar um hash e armazena uma sessão aleatória em cookie `HttpOnly`. A API filtra cada consulta pelo usuário autenticado.
 
+## Smoke test do Firebase Hosting
+
+Depois de publicar o Hosting, valide a URL pública com:
+
+```bash
+npm run test:smoke
+```
+
+Para testar outra URL, use `SMOKE_URL=https://seu-dominio.web.app npm run test:smoke`. O mesmo teste pode ser executado manualmente no GitHub Actions em **Actions → Firebase Hosting smoke test → Run workflow**. Ele verifica o redirecionamento inicial, os assets do login, o dashboard e a página 404 personalizada sem criar usuários ou acessar dados de clientes.
+
 ## Testes
 
 Execute:
