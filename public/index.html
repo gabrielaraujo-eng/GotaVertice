@@ -27,14 +27,14 @@
       </div>
 
       <nav class="main-nav" aria-label="Navegação principal">
-        <a class="nav-link active" href="#inicio"><span>⌂</span> Visão geral</a>
-        <a class="nav-link" href="#leituras"><span>＋</span> Nova leitura</a>
-        <a class="nav-link" href="#historico"><span>▤</span> Histórico</a>
-        <a class="nav-link" href="#residencia"><span>⚙</span> Residência</a>
+        <a class="nav-link active" href="#inicio" aria-current="page">Visão geral</a>
+        <a class="nav-link" href="#leituras">Nova leitura</a>
+        <a class="nav-link" href="#historico">Histórico</a>
+        <a class="nav-link" href="#residencia">Residência</a>
       </nav>
 
       <div class="sidebar-tip">
-        <span class="tip-icon">✦</span>
+        <span class="tip-icon" aria-hidden="true"></span>
         <strong>Pequenas mudanças fazem diferença</strong>
         <p>Fechar a torneira ao escovar os dentes pode economizar até 12 litros por minuto.</p>
       </div>
@@ -49,7 +49,7 @@
           <h1>Visão geral da residência</h1>
         </div>
         <div class="topbar-actions">
-          <button class="icon-button" type="button" aria-label="Notificações"><span class="notification-dot"></span>♢</button>
+          <button class="icon-button" type="button" aria-label="Notificações"><span class="notification-dot"></span></button>
           <button class="avatar" id="logoutButton" type="button" aria-label="Sair da conta" title="Sair da conta">GC</button>
         </div>
       </header>
@@ -79,25 +79,25 @@
 
         <div class="metric-grid">
           <article class="metric-card featured">
-            <div class="metric-icon blue">◒</div>
+            <div class="metric-icon blue" aria-hidden="true"></div>
             <span class="metric-label">Consumo no mês</span>
             <strong id="currentConsumption">— <small>m³</small></strong>
             <span class="metric-change positive" id="consumptionChange">Aguardando registros</span>
           </article>
           <article class="metric-card">
-            <div class="metric-icon green">♧</div>
+            <div class="metric-icon green" aria-hidden="true"></div>
             <span class="metric-label">Média da residência</span>
             <strong id="averageConsumption">— <small>m³</small></strong>
             <span class="metric-change neutral">será calculada após os registros</span>
           </article>
           <article class="metric-card">
-            <div class="metric-icon amber">♧</div>
+            <div class="metric-icon amber" aria-hidden="true"></div>
             <span class="metric-label">Economia acumulada</span>
             <strong id="savedConsumption">— <small>m³</small></strong>
             <span class="metric-change positive">será calculada após os registros</span>
           </article>
           <article class="metric-card alert-card" id="alertMetric">
-            <div class="metric-icon coral">!</div>
+            <div class="metric-icon coral" aria-hidden="true"></div>
             <span class="metric-label">Status do consumo</span>
             <strong id="statusText">Aguardando dados</strong>
             <span class="metric-change neutral" id="statusDetail">Registre duas leituras</span>
@@ -128,12 +128,12 @@
               <span class="eyebrow">Leitura do mês</span>
               <h2 id="insight-title">Uma boa evolução</h2>
             </div>
-            <span class="insight-spark">↗</span>
+            <span class="insight-spark" aria-hidden="true"></span>
           </div>
           <div class="insight-number"><span id="insightPercent">—</span></div>
           <p>Registre pelo menos duas leituras para comparar este período com o anterior.</p>
           <div class="insight-divider"></div>
-          <div class="insight-tip"><span>✦</span><div><strong>Dica do mês</strong><p>Verifique torneiras e descargas. Pequenos vazamentos podem desperdiçar centenas de litros.</p></div></div>
+          <div class="insight-tip"><span aria-hidden="true"></span><div><strong>Dica do mês</strong><p>Verifique torneiras e descargas. Pequenos vazamentos podem desperdiçar centenas de litros.</p></div></div>
         </article>
       </section>
 
@@ -153,20 +153,20 @@
         </article>
 
         <article class="panel form-panel" id="leituras" aria-labelledby="form-title">
-          <div class="panel-heading"><div><span class="eyebrow">Atualize seu histórico</span><h2 id="form-title">Nova leitura</h2></div><span class="form-symbol">＋</span></div>
+          <div class="panel-heading"><div><span class="eyebrow">Atualize seu histórico</span><h2 id="form-title">Nova leitura</h2></div><span class="form-symbol" aria-hidden="true"></span></div>
           <form id="readingForm">
             <label for="readingDate">Data da leitura</label>
             <input id="readingDate" name="readingDate" type="date" required>
             <label for="meterReading">Leitura do hidrômetro <span>(m³)</span></label>
             <input id="meterReading" name="meterReading" type="number" min="0" step="0.1" placeholder="Ex.: 248,5" required>
             <button class="primary-button full" type="submit">Salvar leitura <span>→</span></button>
-            <p class="form-feedback" id="formFeedback" role="status"></p>
+            <p class="form-feedback" id="formFeedback" role="status" aria-live="polite"></p>
           </form>
         </article>
       </section>
 
       <section class="panel residence-panel" id="residencia" aria-labelledby="residence-title">
-        <div class="panel-heading"><div><span class="eyebrow">Configuração</span><h2 id="residence-title">Sua residência</h2></div><span class="form-symbol">⌂</span></div>
+        <div class="panel-heading"><div><span class="eyebrow">Configuração</span><h2 id="residence-title">Sua residência</h2></div><span class="form-symbol" aria-hidden="true"></span></div>
         <form id="residenceForm" class="residence-form">
           <div><label for="residenceName">Nome da residência</label><input id="residenceName" type="text" placeholder="Ex.: Casa da família" required></div>
           <div><label for="residentCount">Número de moradores</label><input id="residentCount" type="number" min="1" max="30" value="2" required></div>
@@ -182,7 +182,7 @@
       <footer class="page-footer">GotaVértice <span>·</span> Registros da sua residência. <span>·</span> <a href="/privacidade/">Privacidade</a> <span>·</span> <a href="/cookies/">Cookies</a></footer>
     </main>
   </div>
-  <div class="toast" id="toast" role="status"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="consumption.js"></script>
   <script type="module" src="app.js"></script>
 </body>
