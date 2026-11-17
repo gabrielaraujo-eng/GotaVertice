@@ -143,6 +143,8 @@ input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(73,169,191,.
 .form-panel .primary-button { margin-top: 3px; }
 .primary-button.full { width: 100%; }
 .form-feedback { color: var(--green); font-size: 10px; min-height: 15px; padding-top: 9px; text-align: center; }
+.form-feedback[data-type="error"] { color: #c56d62; }
+.chart-empty { fill: #9aaeb0; font-size: 13px; }
 .residence-panel { margin-top: 15px; }
 .residence-form { align-items: end; display: grid; gap: 13px; grid-template-columns: 1fr 190px auto; margin-top: 19px; }
 .residence-form label { display: block; }
