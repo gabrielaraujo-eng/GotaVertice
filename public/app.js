@@ -67,7 +67,7 @@ function renderResidence() {
 }
 
 function renderMetrics() {
-  const { current, average, change, savings } = getMetrics();
+  const { current, average, change, savings, consumptions } = getMetrics();
   $('#currentConsumption').innerHTML = `${formatNumber(current)} <small>m³</small>`;
   $('#averageConsumption').innerHTML = `${formatNumber(average)} <small>m³</small>`;
   $('#savedConsumption').innerHTML = `${formatNumber(savings)} <small>m³</small>`;
@@ -77,8 +77,9 @@ function renderMetrics() {
   changeElement.innerHTML = `${change <= 0 ? '↓' : '↑'} ${formatNumber(Math.abs(change))}% <b>vs. mês anterior</b>`;
 
   const isAlert = change > 20;
-  $('#statusText').textContent = isAlert ? 'Atenção' : 'Tudo certo';
-  $('#statusDetail').textContent = isAlert ? 'Aumento acima de 20%' : 'Nenhum aumento expressivo';
+  const hasEnoughData = consumptions.length > 0;
+  $('#statusText').textContent = isAlert ? 'Atenção' : hasEnoughData ? 'Tudo certo' : 'Aguardando dados';
+  $('#statusDetail').textContent = isAlert ? 'Aumento acima de 20%' : hasEnoughData ? 'Nenhum aumento expressivo' : 'Registre outra leitura';
   $('#alertMetric').classList.toggle('has-alert', isAlert);
   $('#insightPercent').textContent = formatNumber(Math.abs(change));
   $('#insight-title').textContent = isAlert ? 'Vale investigar' : change <= 0 ? 'Uma boa evolução' : 'Consumo estável';
@@ -102,10 +103,12 @@ function renderChart() {
   const { consumptions } = getMetrics();
   const chart = $('#consumptionChart');
   const labels = $('#chartLabels');
+  const yLabels = $('.chart-y-labels');
   const width = 640;
   const height = 220;
-  const max = 20;
   const points = consumptions.length ? consumptions.slice(-6) : [];
+  const highestValue = Math.max(...points.map((point) => point.consumption), 0);
+  const max = Math.max(20, Math.ceil(highestValue / 5) * 5);
   const step = points.length > 1 ? width / (points.length - 1) : width;
   const coords = points.map((point, index) => ({
     x: points.length > 1 ? index * step : width / 2,
@@ -116,10 +119,11 @@ function renderChart() {
   const line = coords.map((point) => `${point.x},${point.y}`).join(' ');
   const area = coords.length ? `0,${height} ${line} ${width},${height}` : '';
   const grid = [0, 1, 2, 3, 4].map((index) => `<line class="chart-grid-line" x1="0" y1="${index * height / 4}" x2="${width}" y2="${index * height / 4}" />`).join('');
-  const averageY = height - 15 / max * height;
-  const dots = coords.map((point, index) => `<circle class="chart-point ${index === coords.length - 1 ? 'current' : ''}" cx="${point.x}" cy="${point.y}" r="${index === coords.length - 1 ? 5 : 4}"><title>${formatNumber(point.value)} m³</title></circle>`).join('');
-  chart.innerHTML = `<defs><linearGradient id="areaGradient" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#65c1c3" stop-opacity=".38"/><stop offset="100%" stop-color="#65c1c3" stop-opacity="0"/></linearGradient></defs>${grid}<line class="chart-average-line" x1="0" y1="${averageY}" x2="${width}" y2="${averageY}" />${coords.length ? `<polygon class="chart-area" points="${area}"/><polyline class="chart-line" points="${line}"/>${dots}` : ''}`;
+  const averageY = height - Math.min(15, max) / max * height;
+  const dots = coords.map((point, index) => `<circle class="chart-point ${index === coords.length - 1 ? 'current' : ''}" cx="${point.x}" cy="${point.y}" r="${index === coords.length - 1 ? 5 : 4}"><title>${formatNumber(point.value)} m³ em ${point.label}</title></circle>`).join('');
+  chart.innerHTML = `${points.length ? `<defs><linearGradient id="areaGradient" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#65c1c3" stop-opacity=".38"/><stop offset="100%" stop-color="#65c1c3" stop-opacity="0"/></linearGradient></defs>${grid}<line class="chart-average-line" x1="0" y1="${averageY}" x2="${width}" y2="${averageY}" /><polygon class="chart-area" points="${area}"/><polyline class="chart-line" points="${line}"/>${dots}` : '<text class="chart-empty" x="320" y="112" text-anchor="middle">Registre duas leituras para visualizar a evolução</text>'}`;
   labels.innerHTML = coords.map((point) => `<span>${point.label}</span>`).join('');
+  yLabels.innerHTML = [max, max * .75, max * .5, max * .25, 0].map((value) => `<span>${formatNumber(value).replace(',0', '')}</span>`).join('');
 }
 
 function render() {
@@ -136,25 +140,45 @@ function showToast(message) {
   window.setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
+function setFormFeedback(message, type = 'error') {
+  const feedback = $('#formFeedback');
+  feedback.textContent = message;
+  feedback.dataset.type = type;
+}
+
 $('#readingDate').value = new Date().toISOString().slice(0, 10);
 $('#readingForm').addEventListener('submit', (event) => {
   event.preventDefault();
   const date = $('#readingDate').value;
   const meter = Number($('#meterReading').value);
-  const previous = getSortedReadings().at(-1);
-  if (!date || !Number.isFinite(meter) || meter < 0) return;
-  if (previous && meter < previous.meter) {
-    $('#formFeedback').textContent = 'A leitura precisa ser maior que a anterior.';
+  if (!date || !Number.isFinite(meter) || meter < 0) {
+    setFormFeedback('Informe uma data e uma leitura válida.');
     return;
   }
+
   const existing = state.readings.find((reading) => reading.date === date);
-  if (existing) existing.meter = meter;
-  else state.readings.push({ date, meter });
+  const candidateReadings = existing
+    ? state.readings.map((reading) => reading.date === date ? { ...reading, meter } : reading)
+    : [...state.readings, { date, meter }];
+  const ordered = [...candidateReadings].sort((a, b) => a.date.localeCompare(b.date));
+  const index = ordered.findIndex((reading) => reading.date === date);
+  const previous = ordered[index - 1];
+  const next = ordered[index + 1];
+  if (previous && meter < previous.meter) {
+    setFormFeedback(`A leitura precisa ser igual ou maior que ${formatNumber(previous.meter)} m³.`);
+    return;
+  }
+  if (next && meter > next.meter) {
+    setFormFeedback(`A leitura precisa ser igual ou menor que ${formatNumber(next.meter)} m³.`);
+    return;
+  }
+
+  state.readings = candidateReadings;
   saveState();
   render();
   event.target.reset();
   $('#readingDate').value = new Date().toISOString().slice(0, 10);
-  $('#formFeedback').textContent = 'Leitura salva com sucesso.';
+  setFormFeedback('Leitura salva com sucesso.', 'success');
   showToast('Nova leitura registrada.');
 });
 
