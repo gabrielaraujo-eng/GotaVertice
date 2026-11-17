@@ -64,6 +64,11 @@ function getMetrics() {
   return { consumptions, current, previous, average, change, savings };
 }
 
+function renderDashboardDate() {
+  const date = new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+  $('#dashboardDate').textContent = `Resumo de ${date}`;
+}
+
 function renderResidence() {
   $('#sidebarResidence').textContent = state.residence.name;
   $('#sidebarResidents').textContent = `${state.residence.residents} ${state.residence.residents === 1 ? 'morador' : 'moradores'}`;
@@ -132,6 +137,7 @@ function renderChart() {
 }
 
 function render() {
+  renderDashboardDate();
   renderResidence();
   renderMetrics();
   renderTable();
