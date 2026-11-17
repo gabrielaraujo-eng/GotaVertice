@@ -38,6 +38,8 @@ check_body() {
 }
 
 printf 'Smoke test: %s\n\n' "$BASE_URL"
+check_status 'apresentação disponível' '/apresentacao/' '200'
+check_body 'apresentação explica proposta' '/apresentacao/' 'Entenda seu consumo'
 check_status 'raiz redireciona' '/' '200' true
 check_body 'login disponível' '/login/' 'GotaVértice'
 check_status 'login.css disponível' '/login/login.css' '200'

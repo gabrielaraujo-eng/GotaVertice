@@ -168,7 +168,14 @@ const server = http.createServer(async (request, response) => {
   try {
     if (url.pathname.startsWith('/api/') || url.pathname === '/healthz') return await api(request, response, url);
     const file = safePublicPath(url.pathname);
-    if (!file || !fs.existsSync(file) || !fs.statSync(file).isFile()) return sendJson(response, 404, { error: 'Página não encontrada.' });
+    if (!file || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
+      const notFound = path.join(PUBLIC, '404.html');
+      if (fs.existsSync(notFound)) {
+        response.writeHead(404, { 'Content-Type': mime(notFound), 'Cache-Control': 'no-cache' });
+        return fs.createReadStream(notFound).pipe(response);
+      }
+      return sendJson(response, 404, { error: 'Página não encontrada.' });
+    }
     response.writeHead(200, { 'Content-Type': mime(file), 'Cache-Control': 'no-cache' });
     fs.createReadStream(file).pipe(response);
   } catch (error) {

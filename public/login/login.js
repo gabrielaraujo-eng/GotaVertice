@@ -9,7 +9,8 @@ const title = document.querySelector("#login-title");
 const subtitle = document.querySelector("#formSubtitle");
 const submitButton = document.querySelector("#submitButton");
 const accountNote = document.querySelector("#accountNote");
-let mode = "login";
+const initialMode = new URLSearchParams(window.location.search).get("mode");
+let mode = initialMode === "register" ? "register" : "login";
 
 function setFeedback(message, type = "error") {
   feedback.textContent = message;

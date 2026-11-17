@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Conheça o GotaVértice: acompanhe leituras e consumo de água da sua residência em um só lugar.">
+  <meta name="robots" content="index,follow">
+  <link rel="icon" type="image/jpeg" href="/assets/github-avatar.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <title>Conheça o GotaVértice</title>
+  <style>
+    :root { color-scheme: dark; --bg: #0b171b; --surface: #14272c; --surface-2: #173b43; --line: #29464c; --text: #e7f4f4; --muted: #a7c0c3; --cyan: #79d4df; --green: #76d3ad; --yellow: #f2c36f; }
+    * { box-sizing: border-box; } html { scroll-behavior: smooth; } body { margin: 0; background: radial-gradient(circle at 80% 15%, #173f48 0, transparent 34%), var(--bg); color: var(--text); font-family: "DM Sans", sans-serif; line-height: 1.6; }
+    a { color: inherit; text-decoration: none; } .wrap { margin: 0 auto; max-width: 1160px; padding: 0 28px; }
+    header { align-items: center; display: flex; justify-content: space-between; padding: 26px 0; } .brand { align-items: center; display: inline-flex; font-family: "Space Grotesk", sans-serif; font-size: 19px; font-weight: 600; gap: 10px; } .brand strong { color: var(--cyan); } .brand-mark { align-items: center; background: var(--cyan); border-radius: 11px 11px 11px 3px; color: #0b171b; display: inline-flex; font-size: 25px; height: 38px; justify-content: center; transform: rotate(-14deg); width: 38px; }
+    .login-link { border: 1px solid var(--line); border-radius: 9px; color: var(--muted); font-size: 13px; font-weight: 700; padding: 10px 16px; } .login-link:hover { border-color: var(--cyan); color: var(--cyan); }
+    main { padding-bottom: 70px; } .hero { align-items: center; display: grid; gap: 55px; grid-template-columns: 1.05fr .95fr; min-height: 570px; padding: 45px 0 70px; } .eyebrow { color: var(--green); font-size: 11px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; } h1, h2 { font-family: "Space Grotesk", sans-serif; } h1 { font-size: clamp(40px, 6vw, 76px); letter-spacing: -3px; line-height: .98; margin: 18px 0 23px; max-width: 680px; } h1 em { color: var(--cyan); font-style: normal; } .hero-copy > p { color: var(--muted); font-size: 17px; line-height: 1.7; max-width: 570px; }
+    .actions { align-items: center; display: flex; flex-wrap: wrap; gap: 13px; margin-top: 30px; } .primary { background: var(--yellow); border-radius: 9px; color: #21383d; font-weight: 700; padding: 14px 20px; } .primary:hover { filter: brightness(1.08); transform: translateY(-2px); } .secondary { border: 1px solid var(--line); border-radius: 9px; color: var(--muted); font-weight: 700; padding: 13px 20px; } .secondary:hover { border-color: var(--cyan); color: var(--cyan); }
+    .hero-visual { background: linear-gradient(145deg, #123b45, #14272c); border: 1px solid #2d626b; border-radius: 28px; box-shadow: 0 28px 70px rgba(0,0,0,.28); min-height: 380px; overflow: hidden; padding: 28px; position: relative; } .hero-visual::before, .hero-visual::after { border: 1px solid rgba(121,212,223,.2); border-radius: 50%; content: ""; position: absolute; } .hero-visual::before { height: 350px; right: -140px; top: -130px; width: 350px; } .hero-visual::after { bottom: -180px; height: 360px; left: -170px; width: 360px; }
+    .visual-label { color: var(--muted); font-size: 11px; position: relative; z-index: 1; } .visual-number { color: var(--text); font-family: "Space Grotesk", sans-serif; font-size: 62px; letter-spacing: -3px; margin-top: 70px; position: relative; z-index: 1; } .visual-number small { color: var(--cyan); font-family: "DM Sans", sans-serif; font-size: 19px; letter-spacing: 0; } .visual-bar { background: #0e252b; border-radius: 999px; height: 12px; margin-top: 24px; overflow: hidden; position: relative; z-index: 1; } .visual-bar span { background: linear-gradient(90deg, var(--green), var(--cyan)); border-radius: inherit; display: block; height: 100%; width: 68%; } .visual-note { color: var(--muted); font-size: 12px; margin-top: 14px; position: relative; z-index: 1; }
+    .features { display: grid; gap: 14px; grid-template-columns: repeat(3, 1fr); } .feature { background: rgba(20,39,44,.82); border: 1px solid var(--line); border-radius: 16px; padding: 24px; } .feature-icon { color: var(--green); font-size: 23px; } .feature h2 { font-size: 19px; margin: 15px 0 7px; } .feature p { color: var(--muted); font-size: 13px; margin: 0; }
+    .privacy { border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; margin-top: 55px; padding-top: 23px; } .privacy a { color: var(--cyan); } footer { color: #789397; font-size: 11px; padding: 24px 0 35px; text-align: center; }
+    :focus-visible { outline: 3px solid rgba(121,212,223,.55); outline-offset: 4px; }
+    @media (max-width: 800px) { .hero { gap: 25px; grid-template-columns: 1fr; padding-top: 35px; } .hero-visual { min-height: 300px; } .visual-number { margin-top: 45px; } .features { grid-template-columns: 1fr; } h1 { font-size: clamp(42px, 13vw, 66px); } }
+    @media (max-width: 480px) { .wrap { padding: 0 19px; } header { padding: 20px 0; } .login-link { font-size: 11px; padding: 8px 11px; } .hero-copy > p { font-size: 15px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="/apresentacao/" aria-label="GotaVértice - início"><span class="brand-mark" aria-hidden="true">⌁</span><span><strong>Gota</strong>Vértice</span></a>
+      <a class="login-link" href="/login/">Já tenho uma conta</a>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <span class="eyebrow">Cuidado diário com a água</span>
+          <h1>Entenda seu consumo antes da próxima conta.</h1>
+          <p>O GotaVértice organiza as leituras do hidrômetro da sua residência para você acompanhar o consumo, perceber mudanças e tomar decisões com mais tranquilidade.</p>
+          <div class="actions"><a class="primary" href="/login/?mode=register">Criar minha conta <span aria-hidden="true">→</span></a><a class="secondary" href="#como-funciona">Como funciona</a></div>
+        </div>
+        <div class="hero-visual" aria-label="Exemplo de acompanhamento de consumo">
+          <span class="visual-label">Resumo do período</span>
+          <div class="visual-number">12,4 <small>m³</small></div>
+          <div class="visual-bar" aria-hidden="true"><span></span></div>
+          <p class="visual-note">Acompanhe cada leitura e compare a evolução ao longo dos meses.</p>
+        </div>
+      </section>
+      <section id="como-funciona" class="features" aria-label="Como o GotaVértice funciona">
+        <article class="feature"><span class="feature-icon" aria-hidden="true">＋</span><h2>Registre</h2><p>Adicione a data e o valor do hidrômetro sempre que fizer uma leitura.</p></article>
+        <article class="feature"><span class="feature-icon" aria-hidden="true">↗</span><h2>Acompanhe</h2><p>Veja histórico, consumo calculado, média e mudanças fora do padrão.</p></article>
+        <article class="feature"><span class="feature-icon" aria-hidden="true">⌁</span><h2>Cuide</h2><p>Use as informações para encontrar oportunidades de economia na rotina.</p></article>
+      </section>
+      <p class="privacy">Seus dados ficam protegidos no Firebase e separados por conta. Saiba mais na <a href="/privacidade/">política de privacidade</a> e na <a href="/cookies/">política de cookies</a>.</p>
+    </main>
+    <footer>GotaVértice · Monitorar hoje para economizar amanhã.</footer>
+  </div>
+</body>
+</html>
