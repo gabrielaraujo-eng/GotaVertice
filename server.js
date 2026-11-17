@@ -47,19 +47,11 @@ function verifyPassword(password, salt, expected) {
   return crypto.timingSafeEqual(actual, Buffer.from(expected, 'hex'));
 }
 function hashToken(token) { return crypto.createHash('sha256').update(token).digest('hex'); }
-function seedDemo() {
-  if (db.prepare('SELECT id FROM users WHERE email = ?').get('demo@gotavertice.com')) return;
-  const password = hashPassword('agua123');
-  const user = db.prepare('INSERT INTO users (email, password_hash, password_salt) VALUES (?, ?, ?)').run('demo@gotavertice.com', password.hash, password.salt);
-  const residence = db.prepare('INSERT INTO residences (user_id, name, residents) VALUES (?, ?, ?)').run(Number(user.lastInsertRowid), 'Minha residência', 2);
-  const readings = [
-    ['2026-06-15', 181.2], ['2026-07-15', 194.8], ['2026-08-15', 208.9],
-    ['2026-09-15', 223.4], ['2026-10-15', 237.6], ['2026-11-15', 250.0]
-  ];
-  const insert = db.prepare('INSERT INTO readings (residence_id, date, meter) VALUES (?, ?, ?)');
-  for (const [date, meter] of readings) insert.run(Number(residence.lastInsertRowid), date, meter);
+function createSession(userId) {
+  const token = crypto.randomBytes(32).toString('hex');
+  db.prepare('INSERT INTO sessions (token_hash, user_id, expires_at) VALUES (?, ?, ?)').run(hashToken(token), userId, Date.now() + 7 * 24 * 60 * 60 * 1000);
+  return token;
 }
-seedDemo();
 
 function cookies(request) {
   return Object.fromEntries((request.headers.cookie || '').split(';').filter(Boolean).map((part) => {
@@ -112,12 +104,23 @@ async function api(request, response, url) {
     const user = userFrom(request);
     return user ? sendJson(response, 200, { user }) : sendJson(response, 401, { error: 'Não autenticado.' });
   }
+  if (url.pathname === '/api/auth/register' && request.method === 'POST') {
+    const { email, password } = await body(request);
+    const normalizedEmail = String(email || '').trim().toLowerCase();
+    if (!/^\S+@\S+\.\S+$/.test(normalizedEmail)) return sendJson(response, 422, { error: 'Informe um e-mail válido.' });
+    if (String(password || '').length < 8) return sendJson(response, 422, { error: 'A senha precisa ter pelo menos 8 caracteres.' });
+    if (db.prepare('SELECT id FROM users WHERE email = ?').get(normalizedEmail)) return sendJson(response, 409, { error: 'Este e-mail já possui uma conta. Entre com sua senha.' });
+    const credentials = hashPassword(String(password));
+    const user = db.prepare('INSERT INTO users (email, password_hash, password_salt) VALUES (?, ?, ?)').run(normalizedEmail, credentials.hash, credentials.salt);
+    db.prepare('INSERT INTO residences (user_id, name, residents) VALUES (?, ?, ?)').run(Number(user.lastInsertRowid), 'Minha residência', 1);
+    const token = createSession(Number(user.lastInsertRowid));
+    return sendJson(response, 201, { user: { id: Number(user.lastInsertRowid), email: normalizedEmail } }, { 'Set-Cookie': sessionCookie(token) });
+  }
   if (url.pathname === '/api/auth/login' && request.method === 'POST') {
     const { email, password } = await body(request);
     const user = db.prepare('SELECT * FROM users WHERE email = ?').get(String(email || '').trim().toLowerCase());
     if (!user || !verifyPassword(String(password || ''), user.password_salt, user.password_hash)) return sendJson(response, 401, { error: 'E-mail ou senha inválidos.' });
-    const token = crypto.randomBytes(32).toString('hex');
-    db.prepare('INSERT INTO sessions (token_hash, user_id, expires_at) VALUES (?, ?, ?)').run(hashToken(token), user.id, Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const token = createSession(user.id);
     return sendJson(response, 200, { user: { id: user.id, email: user.email } }, { 'Set-Cookie': sessionCookie(token) });
   }
   if (url.pathname === '/api/auth/logout' && request.method === 'POST') {
