@@ -40,29 +40,37 @@ export function watchAuth(callback) {
   return onAuthStateChanged(auth, callback);
 }
 
+export async function ensureUserProfile(user) {
+  const reference = doc(db, "users", user.uid);
+  const snapshot = await getDoc(reference);
+  const profile = {
+    email: user.email || "",
+    displayName: user.displayName || ""
+  };
+  if (!snapshot.exists()) {
+    profile.residence = { name: "Minha residência", residents: 1 };
+    profile.createdAt = serverTimestamp();
+  } else if (!snapshot.data().residence) {
+    profile.residence = { name: "Minha residência", residents: 1 };
+  }
+  await setDoc(reference, profile, { merge: true });
+}
+
 export async function registerAccount(email, password) {
   const credential = await createUserWithEmailAndPassword(auth, email, password);
-  await setDoc(doc(db, "users", credential.user.uid), {
-    email: credential.user.email,
-    residence: { name: "Minha residência", residents: 1 },
-    createdAt: serverTimestamp()
-  }, { merge: true });
+  await ensureUserProfile(credential.user);
   return credential.user;
 }
 
 export async function loginAccount(email, password) {
   const credential = await signInWithEmailAndPassword(auth, email, password);
+  await ensureUserProfile(credential.user);
   return credential.user;
 }
 
 export async function loginWithGoogle() {
   const credential = await signInWithPopup(auth, new GoogleAuthProvider());
-  await setDoc(doc(db, "users", credential.user.uid), {
-    email: credential.user.email,
-    displayName: credential.user.displayName || "",
-    residence: { name: "Minha residência", residents: 1 },
-    createdAt: serverTimestamp()
-  }, { merge: true });
+  await ensureUserProfile(credential.user);
   return credential.user;
 }
 
