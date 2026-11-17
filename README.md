@@ -150,6 +150,12 @@ Todas as rotas abaixo, exceto `/healthz` e as rotas de autenticação, exigem um
 
 As senhas nunca são salvas em texto puro. O servidor usa `scrypt` para derivar um hash e armazena uma sessão aleatória em cookie `HttpOnly`. A API filtra cada consulta pelo usuário autenticado.
 
+## Privacidade, segurança e direitos do usuário
+
+A aplicação usa Firebase Authentication para contas e Cloud Firestore para residência e leituras. As regras do Firestore exigem autenticação e limitam o acesso ao próprio UID; dados de clientes não são versionados no GitHub. A configuração web do Firebase é pública por natureza, mas credenciais Admin SDK e chaves privadas são bloqueadas pelo `.gitignore`.
+
+As páginas públicas [política de privacidade](/privacidade/) e [cookies e tecnologias locais](/cookies/) explicam o tratamento de dados, os provedores usados, a retenção e os controles disponíveis. No dashboard, o usuário pode exportar seus dados em JSON, limpar residência e leituras ou solicitar a exclusão completa da conta. A exclusão exige a confirmação `EXCLUIR` e pode exigir login recente por segurança.
+
 ## Smoke test do Firebase Hosting
 
 Depois de publicar o Hosting, valide a URL pública com:

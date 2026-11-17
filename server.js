@@ -93,10 +93,12 @@ function redirect(response, location) { response.writeHead(302, { Location: loca
 function safePublicPath(urlPath) {
   const requested = urlPath === '/' ? 'login/index.html' : urlPath === '/dashboard' ? 'index.html' : urlPath.replace(/^\//, '');
   const file = path.resolve(PUBLIC, requested);
-  return file.startsWith(PUBLIC + path.sep) ? file : null;
+  if (!file.startsWith(PUBLIC + path.sep)) return null;
+  if (fs.existsSync(file) && fs.statSync(file).isDirectory()) return path.join(file, 'index.html');
+  return file;
 }
 function mime(file) {
-  return { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml' }[path.extname(file)] || 'application/octet-stream';
+  return { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png' }[path.extname(file)] || 'application/octet-stream';
 }
 
 async function api(request, response, url) {

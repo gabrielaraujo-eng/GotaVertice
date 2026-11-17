@@ -1,5 +1,6 @@
 import {
   clearUserData,
+  deleteAccount,
   loadUserData,
   logoutAccount,
   saveReading,
@@ -90,6 +91,18 @@ $("#exportDataButton")?.addEventListener("click", () => {
 $("#clearDataButton")?.addEventListener("click", async () => {
   if (!window.confirm("Isso removerá residência e leituras salvas na nuvem. Continuar?")) return;
   try { refresh(await clearUserData(currentUser)); showToast("Dados da residência limpos."); } catch { showToast("Não foi possível limpar os dados."); }
+});
+
+$("#deleteAccountButton")?.addEventListener("click", async () => {
+  const confirmation = window.prompt("Esta ação é permanente. Digite EXCLUIR para apagar sua conta, residência e leituras:");
+  if (confirmation !== "EXCLUIR") return;
+  try {
+    await deleteAccount(currentUser);
+    window.location.replace("/login/?deleted=1");
+  } catch (error) {
+    if (error.code === "auth/requires-recent-login") showToast("Por segurança, saia e entre novamente antes de excluir a conta.");
+    else showToast("Não foi possível excluir a conta. Tente novamente.");
+  }
 });
 
 document.querySelectorAll(".nav-link").forEach((link) => link.addEventListener("click", () => { document.querySelectorAll(".nav-link").forEach((item) => item.classList.remove("active")); link.classList.add("active"); }));
