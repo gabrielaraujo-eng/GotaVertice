@@ -1,6 +1,7 @@
 import {
   clearUserData,
   deleteAccount,
+  ensureUserProfile,
   loadUserData,
   logoutAccount,
   saveReading,
@@ -112,5 +113,8 @@ $("#logoutButton")?.addEventListener("click", async () => { await logoutAccount(
 watchAuth(async (user) => {
   if (!user) return window.location.replace("/login/");
   currentUser = user;
-  try { refresh(await loadUserData(user)); } catch { showToast("Não foi possível carregar seus dados. Verifique o Firestore."); }
+  try {
+    await ensureUserProfile(user);
+    refresh(await loadUserData(user));
+  } catch { showToast("Não foi possível carregar seus dados. Verifique o Firestore."); }
 });
