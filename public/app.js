@@ -196,6 +196,30 @@ $('#residenceForm').addEventListener('submit', (event) => {
   showToast('Dados da residência atualizados.');
 });
 
+$('#exportDataButton')?.addEventListener('click', () => {
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    residence: state.residence,
+    readings: getSortedReadings()
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `gota-vertice-${new Date().toISOString().slice(0, 10)}.json`;
+  link.click();
+  URL.revokeObjectURL(url);
+  showToast('Dados exportados com sucesso.');
+});
+
+$('#clearDataButton')?.addEventListener('click', () => {
+  if (!window.confirm('Isso removerá residência e leituras salvas neste navegador. Continuar?')) return;
+  state = structuredClone(defaultState);
+  saveState();
+  render();
+  showToast('Dados locais limpos.');
+});
+
 document.querySelectorAll('.nav-link').forEach((link) => link.addEventListener('click', () => {
   document.querySelectorAll('.nav-link').forEach((item) => item.classList.remove('active'));
   link.classList.add('active');
