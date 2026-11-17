@@ -4,6 +4,7 @@
   "private": true,
   "description": "Água Consciente — monitoramento de consumo de água",
   "scripts": {
+    "test": "node --test tests/consumption.test.js",
     "dev": "python3 -m http.server 4173 --directory public",
     "start": "python3 -m http.server 4173 --directory public"
   }
