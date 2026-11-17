@@ -17,22 +17,35 @@ Depois de criar uma conta, a pessoa pode:
 - receber um alerta quando o consumo sobe mais de 20% em relação ao período anterior;
 - exportar os próprios dados em JSON;
 - limpar os dados da residência com confirmação;
-- sair da conta e encerrar a sessão no servidor.
+- entrar com e-mail/senha ou Google;
+- sair da conta e encerrar a sessão;
+- excluir a conta e os dados da nuvem após confirmação explícita.
 
 ## Publicação da versão web
 
 A publicação é feita a partir da raiz deste repositório, mas o conteúdo enviado pelo Firebase Hosting vem somente de `public/`. O arquivo `firebase.json` deve conter `"public": "public"`.
 
-Depois de instalar e autenticar o Firebase CLI, execute:
+Depois de instalar e autenticar o Firebase CLI, associe o diretório ao projeto correto uma única vez:
 
 ```bash
-firebase init hosting
-firebase deploy --only hosting
+firebase use gotavertice-gj
 ```
 
-Durante o `firebase init hosting`, selecione o projeto Firebase correto, use `public` como diretório público e responda **No** para configuração de aplicação de página única. O deploy cria uma URL `*.web.app`.
+Para publicar as regras do Firestore e o site atualizado:
+
+```bash
+firebase deploy --only firestore:rules,hosting
+```
+
+O Hosting publica somente `public/`. As páginas públicas incluem a política de privacidade, a política de cookies, `sitemap.xml`, `robots.txt` e a página 404. O deploy cria ou atualiza a URL `*.web.app`.
 
 O repositório inteiro pode permanecer no GitHub. Arquivos como `server.js`, `data/`, `tests/`, `Dockerfile` e `package.json` continuam úteis para desenvolvimento local e testes, mas não são enviados como conteúdo do Hosting quando `public` é o diretório configurado. As regras `firestore.rules` e os índices `firestore.indexes.json` são configurações versionáveis; os documentos dos clientes permanecem no Firebase.
+
+## Configuração do Firebase
+
+No Console do Firebase, ative **Authentication → E-mail/senha** e **Google**. O Firestore deve estar em modo de produção, com a região definida no projeto. O frontend usa a configuração pública do Firebase Web em `public/firebase.js`; ela não substitui nem contém uma credencial Admin SDK.
+
+As regras versionadas em `firestore.rules` permitem acesso apenas ao usuário autenticado cujo UID corresponde ao caminho do documento. Não use `allow read, write: if true` em produção. Nunca envie para o GitHub arquivos com `private_key`, `serviceAccount`, `.env` ou `firebase-adminsdk`.
 
 ## Requisitos
 
@@ -102,9 +115,10 @@ Em **Sua residência**, o botão de exportação baixa um arquivo JSON com a res
 ## Comandos disponíveis
 
 ```bash
-npm run dev    # inicia o servidor para desenvolvimento
-npm start      # inicia o servidor como processo de aplicação
-npm test       # executa todos os testes automatizados
+npm run dev        # inicia o servidor local legado
+npm start          # inicia o servidor local como aplicação
+npm test           # executa os testes automatizados
+npm run test:smoke # valida o Hosting público sem alterar dados
 ```
 
 O servidor aceita a variável `PORT`. Por exemplo:
@@ -120,9 +134,10 @@ A rota `GET /healthz` responde com o estado do serviço e pode ser usada por uma
 | Camada | Arquivo ou pasta | Responsabilidade |
 | --- | --- | --- |
 | Servidor | `server.js` | HTTP, arquivos estáticos, rotas da API, cookies e autenticação |
-| Banco | `data/gotavertice.sqlite` | Usuários, sessões, residências e leituras; criado automaticamente |
-| Login | `public/login/` | Entrar e criar conta pela API |
-| Dashboard | `public/index.html`, `public/app.js` | Interface e chamadas para o servidor |
+| Banco web | Firebase Authentication + Cloud Firestore | Contas, residências e leituras da versão publicada |
+| Banco local legado | `data/gotavertice.sqlite` | Desenvolvimento local e testes; ignorado pelo Git |
+| Login | `public/login/` + `public/firebase.js` | E-mail/senha e Google pelo Firebase Authentication |
+| Dashboard | `public/index.html`, `public/app.js` | Interface e chamadas para o Firestore na versão web |
 | Regras | `public/consumption.js` | Ordenação, consumo, média, alertas e economia |
 | Estilos | `public/styles.css`, `public/login/login.css` | Identidade visual, responsividade e foco acessível |
 | Testes | `tests/` | Regras de consumo e integração do servidor |
@@ -154,7 +169,7 @@ As senhas nunca são salvas em texto puro. O servidor usa `scrypt` para derivar 
 
 A aplicação usa Firebase Authentication para contas e Cloud Firestore para residência e leituras. As regras do Firestore exigem autenticação e limitam o acesso ao próprio UID; dados de clientes não são versionados no GitHub. A configuração web do Firebase é pública por natureza, mas credenciais Admin SDK e chaves privadas são bloqueadas pelo `.gitignore`.
 
-As páginas públicas [política de privacidade](/privacidade/) e [cookies e tecnologias locais](/cookies/) explicam o tratamento de dados, os provedores usados, a retenção e os controles disponíveis. No dashboard, o usuário pode exportar seus dados em JSON, limpar residência e leituras ou solicitar a exclusão completa da conta. A exclusão exige a confirmação `EXCLUIR` e pode exigir login recente por segurança.
+As páginas públicas [política de privacidade](https://gotavertice-gj.web.app/privacidade/) e [cookies e tecnologias locais](https://gotavertice-gj.web.app/cookies/) explicam o tratamento de dados, os provedores usados, a retenção e os controles disponíveis. No dashboard, o usuário pode exportar seus dados em JSON, limpar residência e leituras ou solicitar a exclusão completa da conta. A exclusão exige a confirmação `EXCLUIR` e pode exigir login recente por segurança.
 
 ## Smoke test do Firebase Hosting
 
@@ -213,7 +228,7 @@ O volume é importante para manter o banco depois que o container for encerrado.
 
 ## Desenvolvimento e colaboração
 
-A branch `main` contém a versão estável. Use uma branch curta para cada mudança, com nomes como `feature/cadastro-usuarios`, `fix/validacao-leituras` ou `docs/tutorial`. Faça commits semânticos, execute `npm test`, abra um Pull Request para `develop` e só depois promova a integração para `main`.
+A branch `main` contém a versão estável. Use uma branch curta para cada mudança, com nomes como `feature/cadastro-usuarios`, `fix/validacao-leituras` ou `docs/tutorial`. Faça commits semânticos, execute `npm test` e `npm run test:smoke` quando a alteração afetar o Hosting. Abra um Pull Request para `main` e mescle somente depois da revisão.
 
 Antes de abrir um Pull Request, confira:
 
@@ -227,4 +242,4 @@ git diff --check
 
 ## Próximas evoluções
 
-As próximas melhorias naturais são recuperação de senha por e-mail, edição de perfil, múltiplas residências por conta, banco gerenciado para produção, proteção contra tentativas repetidas de login, logs estruturados e publicação com HTTPS. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.
+As próximas melhorias naturais são recuperação de senha por e-mail, reautenticação guiada antes da exclusão, edição de perfil, múltiplas residências por conta, proteção contra tentativas repetidas de login, logs estruturados e monitoramento de custos. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.
