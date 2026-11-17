@@ -268,3 +268,11 @@ body { background:var(--canvas); color:var(--ink); }
 input { background:#11191b; }
 .secondary-button { background:transparent; border:1px solid var(--line); }
 .page-footer { border-top:1px solid var(--line-soft); margin-top:26px; padding-top:20px; }
+
+/* Iconografia funcional: formas CSS discretas, sem caracteres decorativos */
+.metric-icon::before { border: 1px solid currentColor; content:""; display:block; height:9px; width:9px; }
+.metric-icon.green::before { border-radius:50%; }.metric-icon.amber::before { border-bottom-width:2px; border-top:0; height:6px; transform:rotate(-30deg); }.metric-icon.coral::before { height:10px; width:2px; }
+.form-symbol::before { border-left:1px solid currentColor; border-top:1px solid currentColor; content:""; height:9px; transform:rotate(45deg); width:9px; }
+.insight-spark::before { border-right:1px solid currentColor; border-top:1px solid currentColor; content:""; height:9px; transform:rotate(45deg); width:9px; }
+.tip-icon { border:1px solid var(--accent); display:block; height:10px; width:10px; }
+.insight-tip > span { border:1px solid var(--warning); display:block; flex:0 0 auto; height:8px; margin-top:3px; width:8px; }
