@@ -21,7 +21,7 @@ function friendlyError(error) {
     "auth/email-already-in-use": "Este e-mail já possui uma conta. Entre com sua senha.",
     "auth/invalid-credential": "E-mail ou senha inválidos.",
     "auth/invalid-email": "Informe um e-mail válido.",
-    "auth/weak-password": "A senha precisa ter pelo menos seis caracteres.",
+    "auth/weak-password": "A senha precisa ter pelo menos oito caracteres.",
     "auth/too-many-requests": "Muitas tentativas. Aguarde um pouco e tente novamente."
   };
   return messages[error.code] || "Não foi possível concluir o acesso. Tente novamente.";
@@ -33,7 +33,7 @@ function renderMode() {
   title.textContent = registering ? "Criar sua conta" : "Entrar no GotaVértice";
   subtitle.textContent = registering ? "Cadastre-se para acompanhar o consumo da sua residência." : "Entre para continuar acompanhando sua residência.";
   password.autocomplete = registering ? "new-password" : "current-password";
-  password.placeholder = registering ? "Crie uma senha com 6 caracteres" : "Digite sua senha";
+  password.placeholder = registering ? "Crie uma senha com 8 caracteres" : "Digite sua senha";
   submitButton.innerHTML = registering ? "Criar conta <span>→</span>" : "Entrar <span>→</span>";
   accountNote.innerHTML = registering ? "Já possui uma conta? <a href=\"#\" id=\"modeToggle\">Entrar agora</a>" : "Ainda não possui uma conta? <a href=\"#\" id=\"modeToggle\">Criar minha conta</a>";
   document.querySelector("#modeToggle").addEventListener("click", (event) => {
@@ -52,7 +52,7 @@ async function submitCredentials() {
   const userEmail = email.value.trim().toLowerCase();
   const userPassword = password.value;
   if (!userEmail || !userPassword) return setFeedback("Preencha seu e-mail e sua senha para continuar.");
-  if (mode === "register" && userPassword.length < 6) return setFeedback("A senha precisa ter pelo menos seis caracteres.");
+  if (mode === "register" && userPassword.length < 8) return setFeedback("A senha precisa ter pelo menos oito caracteres.");
   setFeedback(mode === "register" ? "Criando sua conta..." : "Validando acesso...", "success");
   try {
     if (mode === "register") await registerAccount(userEmail, userPassword);
