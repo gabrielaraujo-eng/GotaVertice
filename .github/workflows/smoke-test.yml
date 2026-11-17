@@ -1,0 +1,26 @@
+name: Firebase Hosting smoke test
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: URL publicada do Firebase Hosting
+        required: false
+        default: https://gotavertice-gj.web.app
+        type: string
+  schedule:
+    - cron: "17 12 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+      - name: Executar smoke test
+        env:
+          SMOKE_URL: ${{ inputs.url || 'https://gotavertice-gj.web.app' }}
+        run: npm run test:smoke
