@@ -2,9 +2,9 @@
 
 Aplicação web para acompanhar o consumo de água de uma residência, identificar aumentos fora do padrão e tomar decisões para reduzir desperdícios.
 
-O projeto possui uma versão web publicada com Firebase Hosting e uma versão local full-stack com servidor Node.js, API, autenticação persistente e banco SQLite. A versão web publica os arquivos estáticos de `public/`; o backend local continua disponível para desenvolvimento e testes.
+O projeto possui uma versão web publicada com Firebase Hosting e uma versão local full-stack com servidor Node.js, API e SQLite para desenvolvimento. Na versão web, o cadastro e o login usam Firebase Authentication, enquanto a residência e as leituras ficam no Cloud Firestore. O Firebase Hosting publica somente os arquivos estáticos de `public/`.
 
-> **Versão web:** o Firebase Hosting publica somente a pasta `public/`. O arquivo `server.js`, o SQLite e as rotas `/api/*` não são executados pelo Hosting clássico. Por isso, a interface pode ser publicada agora, mas cadastro, login e persistência online exigem uma etapa posterior de migração para Firebase Authentication, Firestore e Functions ou outro backend.
+> **Dados dos clientes:** não são salvos no GitHub. O frontend usa a configuração pública do Firebase Web, e as regras do Firestore restringem cada usuário ao próprio UID. O SQLite local serve apenas para a execução legada e os testes.
 
 ## O que a aplicação faz
 
@@ -32,7 +32,7 @@ firebase deploy --only hosting
 
 Durante o `firebase init hosting`, selecione o projeto Firebase correto, use `public` como diretório público e responda **No** para configuração de aplicação de página única. O deploy cria uma URL `*.web.app`.
 
-O repositório inteiro pode permanecer no GitHub. Arquivos como `server.js`, `data/`, `tests/`, `Dockerfile` e `package.json` continuam úteis para desenvolvimento local, testes, Docker e uma futura hospedagem do backend, mas não são enviados como conteúdo do Hosting quando `public` é o diretório configurado.
+O repositório inteiro pode permanecer no GitHub. Arquivos como `server.js`, `data/`, `tests/`, `Dockerfile` e `package.json` continuam úteis para desenvolvimento local e testes, mas não são enviados como conteúdo do Hosting quando `public` é o diretório configurado. As regras `firestore.rules` e os índices `firestore.indexes.json` são configurações versionáveis; os documentos dos clientes permanecem no Firebase.
 
 ## Requisitos
 

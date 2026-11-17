@@ -5,3 +5,13 @@ node_modules/
 data/*.sqlite
 data/*.sqlite-shm
 data/*.sqlite-wal
+
+# Firebase local e credenciais administrativas
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+.env.*
+!.env.example
+serviceAccountKey.json
+firebase-adminsdk-*.json
+*-firebase-adminsdk-*.json
