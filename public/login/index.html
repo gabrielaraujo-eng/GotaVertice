@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Acesse o Água Consciente para acompanhar o consumo da sua residência.">
+  <title>Entrar | Água Consciente</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <main class="login-shell">
+    <section class="login-visual" aria-label="Mensagem do Água Consciente">
+      <a class="brand" href="../index.html" aria-label="Água Consciente - início">
+        <span class="brand-mark" aria-hidden="true">⌁</span>
+        <span><strong>Água</strong> Consciente</span>
+      </a>
+      <div class="visual-copy">
+        <span class="eyebrow">Seu consumo, com mais consciência</span>
+        <h1>Pequenas leituras.<br><em>Grandes mudanças.</em></h1>
+        <p>Acompanhe os hábitos da sua residência e descubra oportunidades para economizar água todos os meses.</p>
+      </div>
+      <div class="visual-drop" aria-hidden="true"><span>⌁</span></div>
+      <p class="visual-footer">Monitorar hoje para economizar amanhã.</p>
+    </section>
+
+    <section class="login-card" aria-labelledby="login-title">
+      <div class="mobile-brand"><span class="brand-mark" aria-hidden="true">⌁</span><span><strong>Água</strong> Consciente</span></div>
+      <span class="eyebrow">Bem-vindo de volta</span>
+      <h2 id="login-title">Acesse sua conta</h2>
+      <p class="login-subtitle">Entre para continuar acompanhando sua residência.</p>
+      <form id="loginForm" novalidate>
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required>
+        <label for="password">Senha <a href="#" id="forgotPassword">Esqueci minha senha</a></label>
+        <div class="password-field">
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Digite sua senha" required>
+          <button id="togglePassword" type="button" aria-label="Mostrar senha">◉</button>
+        </div>
+        <p class="form-feedback" id="loginFeedback" role="status" aria-live="polite"></p>
+        <button class="primary-button" type="submit">Entrar <span>→</span></button>
+      </form>
+      <div class="divider"><span>ou</span></div>
+      <button class="demo-button" id="demoLogin" type="button">Entrar com acesso de demonstração</button>
+      <p class="account-note">Ainda não possui uma conta? <a href="#" id="createAccount">Criar cadastro</a></p>
+      <p class="prototype-note">Protótipo local: a autenticação real será conectada ao backend na próxima etapa.</p>
+    </section>
+  </main>
+  <script src="login.js"></script>
+</body>
+</html>
