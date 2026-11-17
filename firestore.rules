@@ -6,6 +6,11 @@ service cloud.firestore {
       allow read, write: if request.auth != null
         && request.auth.uid == userId;
 
+      match /residence/{residenceId} {
+        allow read, write: if request.auth != null
+          && request.auth.uid == userId;
+      }
+
       match /readings/{readingId} {
         allow read, write: if request.auth != null
           && request.auth.uid == userId;
