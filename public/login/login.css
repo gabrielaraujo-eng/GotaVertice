@@ -78,3 +78,27 @@ input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(73,169,191,.
   .visual-copy h1 { font-size: 30px; }
   .visual-drop { display: none; }
 }
+
+/* Tema escuro padrão */
+:root {
+  --ink: #e7f4f4;
+  --ink-soft: #a7c0c3;
+  --muted: #789397;
+  --line: #29464c;
+  --canvas: #0b171b;
+  --blue: #63c7d7;
+  --blue-deep: #79d4df;
+  --blue-soft: #173b43;
+  --green: #76d3ad;
+  --coral: #ef9188;
+}
+body { background: var(--canvas); color: var(--ink); }
+.login-card { background: #14272c; border-color: var(--line); box-shadow: 0 18px 45px rgba(0,0,0,.28); }
+.login-subtitle, label, .account-note { color: var(--ink-soft); }
+input { background: #102126; border-color: var(--line); color: var(--ink); }
+input::placeholder { color: #678287; }
+input:focus { border-color: var(--blue); }
+.google-button { background: #17343a; border-color: #35616a; color: var(--ink); }
+.google-button:hover { border-color: var(--blue); box-shadow: 0 5px 14px rgba(0,0,0,.22); }
+.social-divider::before, .social-divider::after { background: var(--line); }
+.security-note { color: var(--muted); }
