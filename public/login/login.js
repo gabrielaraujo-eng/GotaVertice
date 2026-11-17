@@ -1,6 +1,3 @@
-const SESSION_KEY = 'agua-consciente-session';
-const DEMO_EMAIL = 'demo@gotavertice.com';
-const DEMO_PASSWORD = 'agua123';
 const form = document.querySelector('#loginForm');
 const email = document.querySelector('#email');
 const password = document.querySelector('#password');
@@ -11,16 +8,18 @@ function setFeedback(message, type = 'error') {
   feedback.className = `form-feedback ${type}`;
 }
 
-function enterDashboard(userEmail) {
-  localStorage.setItem(SESSION_KEY, JSON.stringify({ email: userEmail, loggedAt: new Date().toISOString() }));
-  window.location.href = '../index.html';
+async function checkSession() {
+  const response = await fetch('/api/auth/session');
+  if (response.ok) window.location.replace('/dashboard');
 }
 
-if (localStorage.getItem(SESSION_KEY)) {
-  window.location.replace('../index.html');
+async function enterDashboard() {
+  window.location.replace('/dashboard');
 }
 
-form.addEventListener('submit', (event) => {
+checkSession().catch(() => {});
+
+form.addEventListener('submit', async (event) => {
   event.preventDefault();
   const userEmail = email.value.trim().toLowerCase();
   const userPassword = password.value;
@@ -28,26 +27,36 @@ form.addEventListener('submit', (event) => {
     setFeedback('Preencha seu e-mail e sua senha para continuar.');
     return;
   }
-  if (userEmail !== DEMO_EMAIL || userPassword !== DEMO_PASSWORD) {
-    setFeedback('Acesso não reconhecido. Use o acesso de demonstração abaixo.');
-    return;
+  setFeedback('Validando acesso...', 'success');
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: userEmail, password: userPassword })
+    });
+    const result = await response.json();
+    if (!response.ok) return setFeedback(result.error || 'Não foi possível entrar.');
+    await enterDashboard();
+  } catch {
+    setFeedback('Servidor indisponível. Verifique se o app está em execução.');
   }
-  enterDashboard(userEmail);
 });
 
-document.querySelector('#demoLogin').addEventListener('click', () => enterDashboard(DEMO_EMAIL));
+document.querySelector('#demoLogin').addEventListener('click', () => {
+  email.value = 'demo@gotavertice.com';
+  password.value = 'agua123';
+  form.requestSubmit();
+});
 document.querySelector('#togglePassword').addEventListener('click', (event) => {
   const showing = password.type === 'text';
   password.type = showing ? 'password' : 'text';
   event.currentTarget.setAttribute('aria-label', showing ? 'Mostrar senha' : 'Ocultar senha');
 });
-
 document.querySelector('#forgotPassword').addEventListener('click', (event) => {
   event.preventDefault();
-  setFeedback('A recuperação de senha estará disponível com o backend.');
+  setFeedback('A recuperação de senha será conectada ao serviço de e-mail.');
 });
-
 document.querySelector('#createAccount').addEventListener('click', (event) => {
   event.preventDefault();
-  setFeedback('O cadastro será conectado na próxima etapa do projeto.');
+  setFeedback('O cadastro de novos usuários será a próxima etapa.');
 });
