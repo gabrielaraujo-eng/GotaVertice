@@ -180,7 +180,7 @@ O MVP será considerado funcional quando for possível:
 
 ## Tecnologias
 
-O MVP inicial foi construído com **HTML, CSS e JavaScript puro**, sem dependências obrigatórias. Os dados ficam salvos no `localStorage` do navegador, permitindo testar o fluxo completo sem backend nesta primeira etapa.
+O frontend continua usando **HTML, CSS e JavaScript puro**, sem framework obrigatório. A aplicação agora possui servidor Node.js, API, sessões HttpOnly e SQLite; o `localStorage` não é mais a fonte de verdade para autenticação ou dados da residência.
 
 ## Como executar
 
@@ -220,7 +220,7 @@ Antes de publicar, a dupla deverá conferir os caminhos dos arquivos, testar a n
 | `public/tela-alertas/index.html` | Estrutura inicial vazia para os alertas |
 | `public/tela-historico/index.html` | Estrutura inicial vazia para o histórico e comparações |
 
-As telas específicas estão propositalmente vazias para serem preenchidas pela dupla durante as próximas etapas. Não há banco de dados, backend ou dependência externa obrigatória nesta versão; os dados demonstrativos do MVP ficam no navegador por meio do `localStorage`.
+As telas específicas antigas permanecem como referências de organização. O fluxo principal usa o dashboard e o login servidos pelo backend; o banco SQLite local é criado automaticamente e o arquivo é ignorado pelo Git.
 
 ## Branches para a dupla
 
@@ -253,3 +253,62 @@ Cada integrante deve trabalhar em uma branch de tarefa, abrir um Pull Request pa
 - [x] Tela de login e sessão local de demonstração implementadas
 - [ ] Testes concluídos
 - [ ] Apresentação final preparada
+
+## Arquitetura da aplicação web
+
+O projeto deixou de depender apenas de uma página estática e agora possui um servidor Node.js com API, autenticação por sessão e persistência em SQLite. O navegador não grava mais residência, leituras ou sessão no `localStorage`: esses dados são carregados e salvos no servidor para o usuário autenticado.
+
+### Executar localmente
+
+Requer Node.js 22 ou superior, pois o projeto usa o módulo SQLite nativo do Node.
+
+```bash
+npm install
+npm run dev
+```
+
+Acesse `http://localhost:4173`. O servidor também expõe `GET /healthz` para verificar a disponibilidade.
+
+### Acesso de demonstração
+
+- E-mail: `demo@gotavertice.com`
+- Senha: `agua123`
+
+A conta é criada automaticamente na primeira inicialização. Em ambiente de produção, a senha deve ser substituída por um fluxo de cadastro e secrets gerenciados.
+
+### Camadas principais
+
+| Camada | Arquivos | Responsabilidade |
+| --- | --- | --- |
+| Servidor | `server.js` | HTTP, arquivos estáticos, API, cookies e autenticação |
+| Banco | `server.js`, `data/` | SQLite com usuários, sessões, residência e leituras |
+| Frontend | `public/app.js` | Dashboard conectado aos endpoints da API |
+| Login | `public/login/login.js` | Login real via `fetch` e sessão HttpOnly |
+| Domínio | `public/consumption.js` | Ordenação, consumo, média, alertas e economia |
+| Qualidade | `tests/` | Testes de domínio e integração do servidor |
+
+### Endpoints essenciais
+
+- `POST /api/auth/login` cria uma sessão com cookie HttpOnly.
+- `GET /api/auth/session` verifica a sessão atual.
+- `POST /api/auth/logout` invalida a sessão.
+- `GET /api/dashboard` retorna residência e leituras do usuário.
+- `PUT /api/residence` atualiza a residência autenticada.
+- `POST /api/readings` cria ou corrige uma leitura respeitando a ordem do hidrômetro.
+- `DELETE /api/data` limpa apenas os dados da residência autenticada.
+
+### Testes
+
+```bash
+npm test
+```
+
+A suíte cobre as regras de consumo e o fluxo de autenticação, isolamento de sessão, carregamento do dashboard e persistência da residência.
+
+### Execução em container
+
+O `Dockerfile` executa o mesmo servidor na porta `3000`. O SQLite dentro do container é adequado para desenvolvimento ou instâncias únicas; em produção compartilhada, use volume persistente ou migre para um banco gerenciado antes de publicar.
+
+### Limite atual de produção
+
+A base já funciona como aplicação web full-stack local e está preparada para deploy como servidor. Para publicação compartilhada, o próximo passo operacional é trocar o SQLite local por um banco gerenciado, configurar secrets, HTTPS e a política de cookies do ambiente publicado. O arquivo do banco local permanece ignorado pelo Git.
