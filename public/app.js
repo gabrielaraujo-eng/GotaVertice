@@ -41,28 +41,7 @@ function formatDate(dateString) {
   return new Date(`${dateString}T12:00:00`).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }).replace('.', '');
 }
 
-function getSortedReadings() {
-  return [...state.readings].sort((a, b) => a.date.localeCompare(b.date));
-}
-
-function getConsumptions() {
-  const readings = getSortedReadings();
-  return readings.slice(1).map((reading, index) => ({
-    ...reading,
-    previousMeter: readings[index].meter,
-    consumption: Math.max(0, reading.meter - readings[index].meter)
-  }));
-}
-
-function getMetrics() {
-  const consumptions = getConsumptions();
-  const current = consumptions.at(-1)?.consumption || 0;
-  const previous = consumptions.at(-2)?.consumption || current;
-  const average = consumptions.length ? consumptions.reduce((sum, item) => sum + item.consumption, 0) / consumptions.length : 0;
-  const change = previous ? ((current - previous) / previous) * 100 : 0;
-  const savings = Math.max(0, consumptions.reduce((sum, item) => sum + Math.max(0, 15 - item.consumption), 0));
-  return { consumptions, current, previous, average, change, savings };
-}
+const { sortReadings: getSortedReadings, getConsumptions, getMetrics } = window.Consumption;
 
 function renderDashboardDate() {
   const date = new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
