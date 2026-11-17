@@ -10,6 +10,7 @@
     "test": "node --test tests/consumption.test.js tests/server.test.js",
     "dev": "node server.js",
     "start": "node server.js",
-    "test:smoke": "bash scripts/smoke-test.sh"
+    "test:smoke": "bash scripts/smoke-test.sh",
+    "security:check": "bash scripts/security-check.sh"
   }
 }

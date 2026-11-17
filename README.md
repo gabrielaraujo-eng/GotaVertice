@@ -119,6 +119,7 @@ npm run dev        # inicia o servidor local legado
 npm start          # inicia o servidor local como aplicação
 npm test           # executa os testes automatizados
 npm run test:smoke # valida o Hosting público sem alterar dados
+npm run security:check # audita regras, dependências, segredos e headers
 ```
 
 O servidor aceita a variável `PORT`. Por exemplo:
@@ -170,6 +171,12 @@ As senhas nunca são salvas em texto puro. O servidor usa `scrypt` para derivar 
 A aplicação usa Firebase Authentication para contas e Cloud Firestore para residência e leituras. As regras do Firestore exigem autenticação e limitam o acesso ao próprio UID; dados de clientes não são versionados no GitHub. A configuração web do Firebase é pública por natureza, mas credenciais Admin SDK e chaves privadas são bloqueadas pelo `.gitignore`.
 
 As páginas públicas [política de privacidade](https://gotavertice-gj.web.app/privacidade/) e [cookies e tecnologias locais](https://gotavertice-gj.web.app/cookies/) explicam o tratamento de dados, os provedores usados, a retenção e os controles disponíveis. No dashboard, o usuário pode exportar seus dados em JSON, limpar residência e leituras ou solicitar a exclusão completa da conta. A exclusão exige a confirmação `EXCLUIR` e pode exigir login recente por segurança.
+
+## Auditoria de segurança
+
+O projeto inclui `npm run security:check`, que verifica se não há chaves privadas no repositório, se as regras do Firestore exigem o UID autenticado, se o Firebase Hosting declara cabeçalhos de proteção e se as dependências de produção não têm vulnerabilidades altas ou críticas. Para verificar também o site publicado, use `SECURITY_URL=https://gotavertice-gj.web.app npm run security:check`.
+
+O tema visual padrão da aplicação é escuro. A interface não usa publicidade comportamental nem rastreamento de anúncios.
 
 ## Smoke test do Firebase Hosting
 
