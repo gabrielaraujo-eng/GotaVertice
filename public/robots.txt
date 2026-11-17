@@ -1,3 +1,4 @@
+# GotaVértice — Gabriel Lucio (@gabrielaraujo-eng)
 User-agent: *
 Allow: /
 Allow: /apresentacao/
