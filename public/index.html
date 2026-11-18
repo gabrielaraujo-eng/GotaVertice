@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,6 +17,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <script src="dashboard-theme.js" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#inicio">Pular para o conteúdo principal</a>
@@ -63,6 +64,10 @@
             <h1>Visão geral da residência</h1>
           </div>
           <div class="topbar-actions">
+            <button class="theme-toggle icon-button" id="themeToggle" type="button" aria-pressed="true" aria-label="Ativar modo claro" title="Alterar tema">
+              <svg id="themeIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z" /></svg>
+              <span id="themeLabel">Claro</span>
+            </button>
             <button class="icon-button" type="button" aria-label="Notificações">
               <svg class="notification-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4" /></svg>
               <span class="notification-dot" aria-hidden="true"></span>
@@ -111,7 +116,7 @@
 
           <div class="metric-grid">
             <article class="metric-card featured">
-              <div class="metric-icon blue" aria-hidden="true"></div>
+              <div class="metric-icon blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 17h16M6 17V9l6-4 6 4v8M9 17v-4h6v4" /></svg></div>
               <span class="metric-label">Consumo no mês</span>
               <strong id="currentConsumption">— <small>m³</small></strong>
               <span class="metric-change positive" id="consumptionChange"
@@ -119,7 +124,7 @@
               >
             </article>
             <article class="metric-card">
-              <div class="metric-icon green" aria-hidden="true"></div>
+              <div class="metric-icon green" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v16M7 9l5-5 5 5M7 15l5 5 5-5" /></svg></div>
               <span class="metric-label">Média da residência</span>
               <strong id="averageConsumption">— <small>m³</small></strong>
               <span class="metric-change neutral"
@@ -127,7 +132,7 @@
               >
             </article>
             <article class="metric-card">
-              <div class="metric-icon amber" aria-hidden="true"></div>
+              <div class="metric-icon amber" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 16h14M7 12h10M9 8h6" /></svg></div>
               <span class="metric-label">Economia acumulada</span>
               <strong id="savedConsumption">— <small>m³</small></strong>
               <span class="metric-change positive"
@@ -135,7 +140,7 @@
               >
             </article>
             <article class="metric-card alert-card" id="alertMetric">
-              <div class="metric-icon coral" aria-hidden="true"></div>
+              <div class="metric-icon coral" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v9M12 17v2" /></svg></div>
               <span class="metric-label">Status do consumo</span>
               <strong id="statusText">Aguardando dados</strong>
               <span class="metric-change neutral" id="statusDetail"
@@ -174,7 +179,7 @@
             </div>
             <div class="chart-legend">
               <span class="legend-dot"></span> Seu consumo
-              <span class="legend-average"></span> Média recomendada
+              <span class="legend-average"></span> Média recomendada: 15 m³/mês
             </div>
           </article>
 
@@ -184,7 +189,7 @@
                 <span class="eyebrow">Leitura do mês</span>
                 <h2 id="insight-title">Uma boa evolução</h2>
               </div>
-              <span class="insight-spark" aria-hidden="true"></span>
+              <span class="insight-spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 16l5-5 4 3 7-7" /></svg></span>
             </div>
             <div class="insight-number"><span id="insightPercent">—</span></div>
             <p>
@@ -193,7 +198,7 @@
             </p>
             <div class="insight-divider"></div>
             <div class="insight-tip">
-              <span aria-hidden="true"></span>
+              <span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18" /></svg></span>
               <div>
                 <strong>Dica do mês</strong>
                 <p>
@@ -246,7 +251,7 @@
                 <span class="eyebrow">Atualize seu histórico</span>
                 <h2 id="form-title">Nova leitura</h2>
               </div>
-              <span class="form-symbol" aria-hidden="true"></span>
+              <span class="form-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" /></svg></span>
             </div>
             <form id="readingForm">
               <label for="readingDate">Data da leitura</label>
@@ -286,7 +291,7 @@
               <span class="eyebrow">Configuração</span>
               <h2 id="residence-title">Sua residência</h2>
             </div>
-            <span class="form-symbol" aria-hidden="true"></span>
+            <span class="form-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" /></svg></span>
           </div>
           <div class="residence-switcher">
             <label for="residenceSelector">Residência ativa</label>
