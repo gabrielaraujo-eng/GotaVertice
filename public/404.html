@@ -52,6 +52,13 @@
         color: #073b4c;
         font-size: 1.2rem;
       }
+      .brand-mark svg {
+        fill: none;
+        height: 20px;
+        stroke: currentColor;
+        stroke-width: 1.7;
+        width: 20px;
+      }
       .card {
         margin-top: 28px;
         padding: clamp(32px, 8vw, 64px) clamp(24px, 7vw, 72px);
@@ -162,7 +169,7 @@
   <body>
     <main>
       <div class="brand">
-        <span class="brand-mark" aria-hidden="true">⌁</span> GotaVértice
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 3C9 7.5 6 10.8 6 14a6 6 0 0 0 12 0c0-3.2-3-6.5-6-11Z" /></svg></span> GotaVértice
       </div>
       <section class="card" aria-labelledby="title">
         <p class="code" aria-hidden="true">404</p>

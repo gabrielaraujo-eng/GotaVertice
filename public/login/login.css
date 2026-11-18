@@ -21,6 +21,7 @@ a { color: inherit; text-decoration: none; }
 .brand, .mobile-brand { align-items: center; display: flex; font-family: "Space Grotesk", sans-serif; font-size: 19px; font-weight: 600; gap: 10px; position: relative; z-index: 2; }
 .brand strong, .mobile-brand strong { color: #a4e2c5; }
 .brand-mark { align-items: center; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.3); border-radius: 11px 11px 11px 3px; display: inline-flex; font-size: 25px; height: 38px; justify-content: center; transform: rotate(-14deg); width: 38px; }
+.brand-mark svg { fill: none; height: 22px; stroke: currentColor; stroke-width: 1.7; transform: rotate(14deg); width: 22px; }
 .visual-copy { margin: auto 0; max-width: 475px; position: relative; z-index: 2; }
 .eyebrow { color: #83a0a4; display: block; font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
 .login-visual .eyebrow { color: #b9e4dd; }
@@ -40,7 +41,8 @@ input { background: #fbfdfd; border: 1px solid var(--line); border-radius: 2px; 
 input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(73,169,191,.12); }
 .password-field { position: relative; }
 .password-field input { padding-right: 42px; }
-.password-field button { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 13px; padding: 10px; position: absolute; right: 3px; top: 1px; }
+.password-field button { align-items: center; background: none; border: 0; color: var(--muted); cursor: pointer; display: inline-flex; justify-content: center; padding: 10px; position: absolute; right: 3px; top: 1px; }
+.password-field button svg { fill: none; height: 18px; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; width: 18px; }
 .form-feedback { color: var(--coral); font-size: 11px; min-height: 17px; margin: -4px 0 5px; }
 .form-feedback.success { color: var(--green); }
 .primary-button { align-items: center; border: 0; border-radius: 2px; cursor: pointer; display: inline-flex; font: inherit; font-size: 12px; font-weight: 700; justify-content: center; min-height: 45px; transition: .2s ease; width: 100%; }

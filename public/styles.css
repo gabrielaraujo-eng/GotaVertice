@@ -111,6 +111,13 @@ input:focus-visible {
   transform: rotate(-14deg);
   width: 35px;
 }
+.brand-mark svg {
+  fill: none;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  width: 22px;
+}
 .sidebar-residence {
   border-bottom: 1px solid var(--line);
   border-top: 1px solid var(--line);
@@ -157,6 +164,23 @@ input:focus-visible {
   color: #91a9ad;
   font-size: 18px;
   width: 20px;
+}
+.nav-icon {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 20px;
+  height: 18px;
+  justify-content: center;
+  width: 20px;
+}
+.nav-icon svg {
+  fill: none;
+  height: 17px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.6;
+  width: 17px;
 }
 .nav-link:hover {
   background: #f1f8f7;
@@ -251,6 +275,15 @@ h2 {
   color: var(--ink-soft);
   font-size: 22px;
   line-height: 1;
+}
+.notification-icon {
+  fill: none;
+  height: 18px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+  width: 18px;
 }
 .notification-dot {
   background: var(--coral);

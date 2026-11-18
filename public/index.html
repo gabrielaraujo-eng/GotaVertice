@@ -23,7 +23,9 @@
     <div class="app-shell">
       <aside class="sidebar">
         <a class="brand" href="#inicio" aria-label="GotaVértice - início">
-          <span class="brand-mark" aria-hidden="true">⌁</span>
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 3C9 7.5 6 10.8 6 14a6 6 0 0 0 12 0c0-3.2-3-6.5-6-11Z" /></svg>
+          </span>
           <span><strong>Gota</strong>Vértice</span>
         </a>
 
@@ -35,11 +37,11 @@
 
         <nav class="main-nav" aria-label="Navegação principal">
           <a class="nav-link active" href="#inicio" aria-current="page"
-            >Visão geral</a
+            ><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="4" y="4" width="6" height="6" /><rect x="14" y="4" width="6" height="6" /><rect x="4" y="14" width="6" height="6" /><rect x="14" y="14" width="6" height="6" /></svg></span>Visão geral</a
           >
-          <a class="nav-link" href="#leituras">Nova leitura</a>
-          <a class="nav-link" href="#historico">Histórico</a>
-          <a class="nav-link" href="#residencia">Residência</a>
+          <a class="nav-link" href="#leituras"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 4v16M4 12h16" /></svg></span>Nova leitura</a>
+          <a class="nav-link" href="#historico"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8" /><path d="M12 8v5l3 2" /></svg></span>Histórico</a>
+          <a class="nav-link" href="#residencia"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="8" r="3" /><path d="M5 20c.7-3.3 3-5 7-5s6.3 1.7 7 5" /></svg></span>Residência</a>
         </nav>
 
         <div class="sidebar-tip">
@@ -62,7 +64,8 @@
           </div>
           <div class="topbar-actions">
             <button class="icon-button" type="button" aria-label="Notificações">
-              <span class="notification-dot"></span>
+              <svg class="notification-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4" /></svg>
+              <span class="notification-dot" aria-hidden="true"></span>
             </button>
             <button
               class="avatar"
@@ -91,7 +94,7 @@
             >
           </div>
           <div class="hero-water" aria-hidden="true">
-            <div class="water-drop"><span>⌁</span></div>
+            <div class="water-drop" aria-hidden="true"></div>
             <div class="water-ring ring-one"></div>
             <div class="water-ring ring-two"></div>
           </div>
