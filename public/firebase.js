@@ -2,9 +2,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/fireba
 import {
   createUserWithEmailAndPassword,
   deleteUser,
+  EmailAuthProvider,
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
+  reauthenticateWithCredential,
+  reauthenticateWithPopup,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -75,6 +78,18 @@ export async function loginAccount(email, password) {
 
 export function recoverPassword(email) {
   return sendPasswordResetEmail(auth, email);
+}
+
+export function hasPasswordProvider(user) {
+  return user.providerData.some(({ providerId }) => providerId === "password");
+}
+
+export function reauthenticateAccount(user, password = "") {
+  if (hasPasswordProvider(user)) {
+    const credential = EmailAuthProvider.credential(user.email, password);
+    return reauthenticateWithCredential(user, credential);
+  }
+  return reauthenticateWithPopup(user, new GoogleAuthProvider());
 }
 
 export async function loginWithGoogle() {

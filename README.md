@@ -25,7 +25,7 @@ Depois de criar uma conta, a pessoa pode:
 - entrar com e-mail/senha ou Google;
 - solicitar recuperação de senha por e-mail;
 - sair da conta e encerrar a sessão;
-- excluir a conta e os dados da nuvem após confirmação explícita.
+- excluir a conta e os dados da nuvem após confirmação explícita e reautenticação recente.
 
 ## Publicação da versão web
 
@@ -176,7 +176,7 @@ As senhas nunca são salvas em texto puro. O servidor usa `scrypt` para derivar 
 
 A aplicação usa Firebase Authentication para contas e Cloud Firestore para residência e leituras. As regras do Firestore exigem autenticação e limitam o acesso ao próprio UID; dados de clientes não são versionados no GitHub. A configuração web do Firebase é pública por natureza, mas credenciais Admin SDK e chaves privadas são bloqueadas pelo `.gitignore`.
 
-As páginas públicas [política de privacidade](https://gotavertice-gj.web.app/privacidade/) e [cookies e tecnologias locais](https://gotavertice-gj.web.app/cookies/) explicam o tratamento de dados, os provedores usados, a retenção e os controles disponíveis. No dashboard, o usuário pode exportar seus dados em JSON, limpar residência e leituras ou solicitar a exclusão completa da conta. A exclusão exige a confirmação `EXCLUIR` e pode exigir login recente por segurança.
+As páginas públicas [política de privacidade](https://gotavertice-gj.web.app/privacidade/) e [cookies e tecnologias locais](https://gotavertice-gj.web.app/cookies/) explicam o tratamento de dados, os provedores usados, a retenção e os controles disponíveis. No dashboard, o usuário pode exportar seus dados em JSON, limpar residência e leituras ou solicitar a exclusão completa da conta. A exclusão exige a confirmação `EXCLUIR` e uma reautenticação recente: senha para contas de e-mail ou confirmação pelo Google para contas Google.
 
 ## Auditoria de segurança
 
@@ -255,4 +255,4 @@ git diff --check
 
 ## Próximas evoluções
 
-As próximas melhorias naturais são reautenticação guiada antes da exclusão, edição de perfil, múltiplas residências por conta, proteção contra tentativas repetidas de login, logs estruturados, monitoramento de custos e uma camada SaaS com organizações, planos e cobrança. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.
+As próximas melhorias naturais são edição de perfil, múltiplas residências por conta, proteção contra tentativas repetidas de login, logs estruturados, monitoramento de custos e uma camada SaaS com organizações, planos e cobrança. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.
