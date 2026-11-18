@@ -23,6 +23,7 @@ Depois de criar uma conta, a pessoa pode:
 - exportar os próprios dados em JSON;
 - limpar os dados da residência com confirmação;
 - entrar com e-mail/senha ou Google;
+- solicitar recuperação de senha por e-mail;
 - sair da conta e encerrar a sessão;
 - excluir a conta e os dados da nuvem após confirmação explícita.
 
@@ -225,7 +226,7 @@ Confirme se o terminal ainda está executando `npm run dev`, se você está usan
 
 ### Esqueci a senha
 
-O fluxo de recuperação por e-mail ainda não está configurado. Em ambiente local, a conta fica no arquivo SQLite da pasta `data`. Para recomeçar com um banco vazio, pare o servidor e remova esse arquivo; essa ação apaga todas as contas e leituras locais.
+Na tela de login, informe o e-mail e clique em **Esqueci minha senha**. O Firebase envia um link de redefinição para o endereço informado. Por segurança, a interface usa a mesma mensagem quando o e-mail não possui uma conta. Se o e-mail não chegar, confira a caixa de spam e confirme no Firebase Console se o provedor **Authentication → E-mail/senha** está ativado.
 
 ## Execução com Docker
 
@@ -254,4 +255,4 @@ git diff --check
 
 ## Próximas evoluções
 
-As próximas melhorias naturais são recuperação de senha por e-mail, reautenticação guiada antes da exclusão, edição de perfil, múltiplas residências por conta, proteção contra tentativas repetidas de login, logs estruturados e monitoramento de custos. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.
+As próximas melhorias naturais são reautenticação guiada antes da exclusão, edição de perfil, múltiplas residências por conta, proteção contra tentativas repetidas de login, logs estruturados, monitoramento de custos e uma camada SaaS com organizações, planos e cobrança. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.

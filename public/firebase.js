@@ -5,6 +5,7 @@ import {
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -70,6 +71,10 @@ export async function loginAccount(email, password) {
   const credential = await signInWithEmailAndPassword(auth, email, password);
   await ensureUserProfile(credential.user);
   return credential.user;
+}
+
+export function recoverPassword(email) {
+  return sendPasswordResetEmail(auth, email);
 }
 
 export async function loginWithGoogle() {
