@@ -178,6 +178,8 @@ As senhas nunca são salvas em texto puro. O servidor usa `scrypt` para derivar 
 
 O login publicado usa o Firebase Authentication, que aplica throttling no serviço quando detecta abuso. A interface também aplica um cooldown progressivo após falhas repetidas e respeita o erro `auth/too-many-requests`, evitando novas tentativas imediatas no navegador sem substituir a proteção do provedor.
 
+O servidor local emite logs JSON com `timestamp`, `level`, `event`, `requestId`, método, rota, status e duração. O nível padrão é `info` e pode ser ajustado com `LOG_LEVEL=warn` ou `LOG_LEVEL=debug`. Senhas, tokens, cookies, e-mails e corpos de requisição não entram nos logs; o header `X-Request-Id` permite correlacionar uma resposta com seu registro operacional.
+
 ## Privacidade, segurança e direitos do usuário
 
 A aplicação usa Firebase Authentication para contas e Cloud Firestore para residência e leituras. As regras do Firestore exigem autenticação e limitam o acesso ao próprio UID; dados de clientes não são versionados no GitHub. A configuração web do Firebase é pública por natureza, mas credenciais Admin SDK e chaves privadas são bloqueadas pelo `.gitignore`.
@@ -261,4 +263,4 @@ git diff --check
 
 ## Próximas evoluções
 
-As próximas melhorias naturais são logs estruturados, monitoramento de custos e uma camada SaaS com organizações, planos e cobrança. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.
+As próximas melhorias naturais são monitoramento de custos e uma camada SaaS com organizações, planos e cobrança. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.
