@@ -27,6 +27,10 @@ const {
   sortReadings: getSortedReadings,
   getConsumptions,
   getMetrics,
+  toLocalDateInput,
+  MONTHLY_REFERENCE_M3,
+  HIGH_CONSUMPTION_M3,
+  ALERT_CHANGE_PERCENT,
 } = window.Consumption;
 
 function formatNumber(value) {
@@ -37,7 +41,12 @@ function formatNumber(value) {
 }
 function formatDate(dateString) {
   return new Date(`${dateString}T12:00:00`)
-    .toLocaleDateString("pt-BR", { month: "short", year: "numeric" })
+    .toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })
+    .replace(".", "");
+}
+function formatChartDate(dateString) {
+  return new Date(`${dateString}T12:00:00`)
+    .toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })
     .replace(".", "");
 }
 function renderDashboardDate() {
@@ -61,71 +70,158 @@ function renderResidence() {
   $("#residenceName").value = state.residence.name;
   $("#residentCount").value = state.residence.residents;
 }
-function renderMetrics() {
-  const { current, average, change, savings, consumptions } = getMetrics(
-    state.readings,
-  );
+function renderMetrics(metrics) {
+  const { current, average, change, savings, consumptions, comparisonAvailable, baselineWasZero } = metrics;
+  const hasData = consumptions.length > 0;
+  const exceedsThreshold = hasData && current > HIGH_CONSUMPTION_M3;
+  const increasingRapidly = comparisonAvailable && change > ALERT_CHANGE_PERCENT;
   $("#currentConsumption").innerHTML =
-    `${formatNumber(current)} <small>m³</small>`;
+    `${hasData ? formatNumber(current) : "—"} <small>m³/mês</small>`;
   $("#averageConsumption").innerHTML =
-    `${formatNumber(average)} <small>m³</small>`;
+    `${hasData ? formatNumber(average) : "—"} <small>m³/mês</small>`;
   $("#savedConsumption").innerHTML =
-    `${formatNumber(savings)} <small>m³</small>`;
+    `${hasData ? formatNumber(savings) : "—"} <small>m³</small>`;
   const changeElement = $("#consumptionChange");
-  changeElement.className = `metric-change ${change <= 0 ? "positive" : "neutral"}`;
-  changeElement.innerHTML = `${change <= 0 ? "↓" : "↑"} ${formatNumber(Math.abs(change))}% <b>vs. mês anterior</b>`;
-  const isAlert = change > 20;
-  const hasEnoughData = consumptions.length > 0;
-  $("#statusText").textContent = isAlert
-    ? "Atenção"
-    : hasEnoughData
-      ? "Tudo certo"
-      : "Aguardando dados";
-  $("#statusDetail").textContent = isAlert
-    ? "Aumento acima de 20%"
-    : hasEnoughData
-      ? "Nenhum aumento expressivo"
-      : "Registre outra leitura";
+  const isAlert = baselineWasZero || exceedsThreshold || increasingRapidly;
+
+  if (!hasData) {
+    changeElement.className = "metric-change neutral";
+    changeElement.textContent = "Aguardando leituras";
+  } else if (!comparisonAvailable) {
+    changeElement.className = "metric-change neutral";
+    changeElement.textContent = "Registre outro intervalo para comparar";
+  } else if (baselineWasZero) {
+    changeElement.className = "metric-change neutral";
+    changeElement.textContent = "Sem base anterior para percentual";
+  } else {
+    const trendArrow = change < 0 ? "↓" : change > 0 ? "↑" : "→";
+    changeElement.className = `metric-change ${change < 0 ? "positive" : "neutral"}`;
+    changeElement.innerHTML = `${trendArrow} ${formatNumber(Math.abs(change))}% <b>vs. intervalo anterior</b>`;
+  }
+
+  $("#statusText").textContent = !hasData
+    ? "Aguardando dados"
+    : isAlert
+      ? "Atenção"
+      : !comparisonAvailable
+        ? "Aguardando comparação"
+        : "Tudo certo";
+  $("#statusDetail").textContent = !hasData
+    ? "Registre duas leituras"
+    : baselineWasZero
+        ? "Consumo após um intervalo estimado zerado"
+        : exceedsThreshold
+          ? `Ritmo mensal estimado acima de ${formatNumber(HIGH_CONSUMPTION_M3)} m³/mês`
+          : increasingRapidly
+            ? `Aumento mensal estimado acima de ${ALERT_CHANGE_PERCENT}%`
+            : !comparisonAvailable
+              ? "Registre outro intervalo para comparar"
+              : "Nenhum aumento expressivo";
   $("#alertMetric").classList.toggle("has-alert", isAlert);
-  $("#insightPercent").textContent = formatNumber(Math.abs(change));
-  $("#insight-title").textContent = isAlert
-    ? "Vale investigar"
-    : change <= 0
-      ? "Uma boa evolução"
-      : "Consumo estável";
-  $(".insight-panel > p").textContent = isAlert
-    ? "O consumo aumentou bastante em relação ao último mês. Confira torneiras, descargas e possíveis vazamentos."
-    : change <= 0
-      ? "Você consumiu menos água que no mês passado. Se mantiver esse ritmo, pode economizar ainda mais até o fim do ano."
-      : "Seu consumo teve uma pequena variação. Continue registrando as leituras para acompanhar essa tendência.";
+  $("#insightPercent").textContent = comparisonAvailable && !baselineWasZero
+    ? formatNumber(Math.abs(change))
+    : "—";
+  $("#insight-title").textContent = !hasData
+    ? "Aguardando leituras"
+    : baselineWasZero
+        ? "Consumo retomado"
+        : exceedsThreshold
+          ? "Ritmo mensal elevado"
+          : !comparisonAvailable
+            ? "Estabelecendo referência"
+            : increasingRapidly
+              ? "Vale investigar"
+              : change < 0
+                ? "Uma boa evolução"
+                : "Consumo estável";
+  $(".insight-panel > p").textContent = !hasData
+    ? "Registre pelo menos duas leituras para estimar o ritmo mensal de consumo."
+    : baselineWasZero
+        ? "Houve consumo após um intervalo estimado sem consumo. Confira as leituras; não há base válida para calcular um percentual."
+        : exceedsThreshold
+          ? `O ritmo mensal estimado está acima de ${formatNumber(HIGH_CONSUMPTION_M3)} m³/mês. Confira hábitos de consumo, torneiras e possíveis vazamentos.`
+          : !comparisonAvailable
+            ? "Uma nova leitura permitirá comparar o ritmo mensal estimado com o intervalo anterior."
+            : increasingRapidly
+              ? `O ritmo mensal estimado aumentou mais de ${ALERT_CHANGE_PERCENT}% em relação ao intervalo anterior. Confira torneiras, descargas e possíveis vazamentos.`
+              : change < 0
+                ? "O ritmo mensal estimado caiu em relação ao intervalo anterior. Continue registrando as leituras para acompanhar essa tendência."
+                : "O ritmo mensal estimado teve uma pequena variação. Continue registrando as leituras para acompanhar essa tendência.";
 }
-function renderTable() {
-  const rows = getConsumptions(state.readings).slice().reverse().slice(0, 5);
+function renderNotification(metrics) {
+  const { consumptions, comparisonAvailable, baselineWasZero, change, current } = metrics;
+  const button = $("#notificationButton");
+  const dot = $("#notificationDot");
+  const exceedsThreshold = consumptions.length > 0 && current > HIGH_CONSUMPTION_M3;
+  const increasingRapidly = comparisonAvailable && change > ALERT_CHANGE_PERCENT;
+  const alert = baselineWasZero || exceedsThreshold || increasingRapidly;
+  let status = "Sem alertas";
+  let message = `Sem aumento acima de ${ALERT_CHANGE_PERCENT}% no ritmo mensal estimado em relação ao intervalo anterior.`;
+
+  if (!consumptions.length) {
+    status = "Aguardando dados";
+    message = "Registre duas leituras para calcular o ritmo mensal estimado.";
+  } else if (baselineWasZero) {
+    status = "Consumo retomado";
+    message = `O ritmo atual é ${formatNumber(current)} m³/mês após um intervalo estimado sem consumo; não há base para calcular um percentual.`;
+  } else if (exceedsThreshold) {
+    status = "Ritmo mensal elevado";
+    message = `O ritmo mensal estimado é ${formatNumber(current)} m³/mês, acima do limite de ${formatNumber(HIGH_CONSUMPTION_M3)} m³/mês. Confira possíveis vazamentos.`;
+  } else if (!comparisonAvailable) {
+    status = "Aguardando comparação";
+    message = "Registre outra leitura para comparar o ritmo mensal com o intervalo anterior.";
+  } else if (increasingRapidly) {
+    status = "Aumento de consumo";
+    message = `O ritmo mensal estimado aumentou mais de ${ALERT_CHANGE_PERCENT}% em relação ao intervalo anterior. Confira possíveis vazamentos.`;
+  } else if (change < 0) {
+    status = "Consumo reduzido";
+    message = `O ritmo mensal estimado caiu ${formatNumber(Math.abs(change))}% em relação ao intervalo anterior.`;
+  }
+
+  $("#notificationStatus").textContent = status;
+  $("#notificationMessage").textContent = message;
+  dot.hidden = !alert;
+  button.setAttribute("aria-label", alert ? "Notificações: há um alerta de consumo" : "Notificações do consumo");
+}
+function renderTable(consumptions) {
+  const rows = consumptions.slice().reverse().slice(0, 5);
   $("#readingsTable").innerHTML = rows.length
     ? rows
-        .map(
-          (item) =>
-            `<tr><td>${formatDate(item.date)}</td><td>${formatNumber(item.meter)} m³</td><td>${formatNumber(item.consumption)} m³</td><td><span class="status-badge ${item.consumption > 18 ? "warning" : "good"}">${item.consumption > 18 ? "Verificar" : "Dentro da meta"}</span></td></tr>`,
-        )
+        .map((item) => {
+          const hasEstimate = item.monthlyEquivalent !== null;
+          const needsAttention = hasEstimate && item.monthlyEquivalent > HIGH_CONSUMPTION_M3;
+          const status = !hasEstimate
+            ? "Sem estimativa"
+            : needsAttention
+              ? "Verificar"
+              : "Dentro da meta";
+          const title = hasEstimate
+            ? `Ritmo mensal estimado: ${formatNumber(item.monthlyEquivalent)} m³/mês.`
+            : "Não foi possível estimar o ritmo mensal para este intervalo.";
+          return `<tr><td>${formatDate(item.date)}</td><td>${formatNumber(item.meter)} m³</td><td>${formatNumber(item.consumption)} m³</td><td><span class="status-badge ${needsAttention ? "warning" : "good"}" title="${title}">${status}</span></td></tr>`;
+        })
         .join("")
     : '<tr><td colspan="4">Adicione uma segunda leitura para calcular o consumo.</td></tr>';
 }
-function renderChart() {
-  const { consumptions } = getMetrics(state.readings);
+function renderChart(consumptions) {
   const chart = $("#consumptionChart");
   const labels = $("#chartLabels");
   const yLabels = $(".chart-y-labels");
   const width = 640;
   const height = 220;
-  const points = consumptions.slice(-6);
-  const highestValue = Math.max(...points.map((point) => point.consumption), 0);
+  const points = consumptions
+    .filter((point) => point.monthlyEquivalent !== null)
+    .slice(-6);
+  const highestValue = Math.max(...points.map((point) => point.monthlyEquivalent), 0);
   const max = Math.max(20, Math.ceil(highestValue / 5) * 5);
   const step = points.length > 1 ? width / (points.length - 1) : width;
   const coords = points.map((point, index) => ({
     x: points.length > 1 ? index * step : width / 2,
-    y: height - (Math.min(point.consumption, max) / max) * height,
-    value: point.consumption,
-    label: formatDate(point.date),
+    y: height - (Math.min(point.monthlyEquivalent, max) / max) * height,
+    value: point.monthlyEquivalent,
+    label: formatChartDate(point.date),
+    intervalDays: point.intervalDays,
+    intervalConsumption: point.consumption,
   }));
   const line = coords.map((point) => `${point.x},${point.y}`).join(" ");
   const area = coords.length ? `0,${height} ${line} ${width},${height}` : "";
@@ -135,14 +231,15 @@ function renderChart() {
         `<line class="chart-grid-line" x1="0" y1="${(index * height) / 4}" x2="${width}" y2="${(index * height) / 4}" />`,
     )
     .join("");
-  const averageY = height - (Math.min(15, max) / max) * height;
+  const averageY = height - (Math.min(MONTHLY_REFERENCE_M3, max) / max) * height;
   const dots = coords
     .map(
       (point, index) =>
-        `<circle class="chart-point ${index === coords.length - 1 ? "current" : ""}" cx="${point.x}" cy="${point.y}" r="${index === coords.length - 1 ? 5 : 4}"><title>${formatNumber(point.value)} m³ em ${point.label}</title></circle>`,
+        `<circle class="chart-point ${index === coords.length - 1 ? "current" : ""}" cx="${point.x}" cy="${point.y}" r="${index === coords.length - 1 ? 5 : 4}"><title>${formatNumber(point.value)} m³/mês estimados em ${point.label}; ${formatNumber(point.intervalConsumption)} m³ em ${point.intervalDays} dias</title></circle>`,
     )
     .join("");
-  chart.innerHTML = `${grid}<line class="chart-average-line" x1="0" y1="${averageY}" x2="${width}" y2="${averageY}" /><text class="chart-average-label" x="636" y="${Math.max(14, averageY - 7)}" text-anchor="end">15 m³/mês</text>${points.length ? `<polygon class="chart-area" points="${area}"/><polyline class="chart-line" points="${line}"/>${dots}` : '<text class="chart-empty" x="320" y="112" text-anchor="middle">Registre duas leituras para visualizar a evolução</text>'}`;
+  chart.innerHTML = `${grid}<line class="chart-average-line" x1="0" y1="${averageY}" x2="${width}" y2="${averageY}" /><text class="chart-average-label" x="636" y="${Math.max(14, averageY - 7)}" text-anchor="end">${formatNumber(MONTHLY_REFERENCE_M3)} m³/mês</text>${points.length ? `<polygon class="chart-area" points="${area}"/><polyline class="chart-line" points="${line}"/>${dots}` : '<text class="chart-empty" x="320" y="112" text-anchor="middle">Registre duas leituras para visualizar a evolução</text>'}`;
+  $("#chartReferenceLabel").textContent = `Média recomendada: ${formatNumber(MONTHLY_REFERENCE_M3)} m³/mês`;
   labels.innerHTML = coords
     .map((point) => `<span>${point.label}</span>`)
     .join("");
@@ -151,11 +248,13 @@ function renderChart() {
     .join("");
 }
 function render() {
+  const metrics = getMetrics(state.readings);
   renderDashboardDate();
   renderResidence();
-  renderMetrics();
-  renderTable();
-  renderChart();
+  renderMetrics(metrics);
+  renderTable(metrics.consumptions);
+  renderChart(metrics.consumptions);
+  renderNotification(metrics);
 }
 function showToast(message) {
   const toast = $("#toast");
@@ -173,7 +272,7 @@ function refresh(data) {
   render();
 }
 
-$("#readingDate").value = new Date().toISOString().slice(0, 10);
+$("#readingDate").value = toLocalDateInput();
 $("#readingForm").addEventListener("submit", async (event) => {
   event.preventDefault();
   const date = $("#readingDate").value;
@@ -194,7 +293,7 @@ $("#readingForm").addEventListener("submit", async (event) => {
       );
     refresh(await saveReading(currentUser, state.residenceId, { date, meter }));
     event.target.reset();
-    $("#readingDate").value = new Date().toISOString().slice(0, 10);
+    $("#readingDate").value = toLocalDateInput();
     setFormFeedback("Leitura salva com sucesso.", "success");
     showToast("Nova leitura registrada.");
   } catch {
@@ -325,6 +424,26 @@ document.querySelectorAll(".nav-link").forEach((link) =>
     link.classList.add("active");
   }),
 );
+
+const notificationButton = $("#notificationButton");
+const notificationPanel = $("#notificationPanel");
+notificationButton?.addEventListener("click", () => {
+  const open = notificationButton.getAttribute("aria-expanded") === "true";
+  notificationButton.setAttribute("aria-expanded", String(!open));
+  notificationPanel.hidden = open;
+  if (!open) notificationPanel.focus();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape" || notificationPanel.hidden) return;
+  notificationPanel.hidden = true;
+  notificationButton.setAttribute("aria-expanded", "false");
+  notificationButton.focus();
+});
+document.addEventListener("click", (event) => {
+  if (event.target.closest?.(".notification-wrap")) return;
+  notificationPanel.hidden = true;
+  notificationButton.setAttribute("aria-expanded", "false");
+});
 
 $("#logoutButton")?.addEventListener("click", async () => {
   await logoutAccount();

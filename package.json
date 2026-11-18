@@ -7,7 +7,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/consumption.test.js tests/server.test.js",
+    "test": "node --test tests/consumption.test.js tests/dashboard-theme.test.js tests/theme-contrast.test.js tests/server.test.js",
     "dev": "node server.js",
     "start": "node server.js",
     "test:smoke": "bash scripts/smoke-test.sh",
