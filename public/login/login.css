@@ -58,8 +58,9 @@ input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(73,169,191,.
 .account-note { color: var(--ink-soft); font-size: 11px; margin: 26px 0 0; text-align: center; }
 .account-note a { color: var(--blue-deep); font-weight: 700; }
 .security-note { color: var(--muted); font-size: 10px; line-height: 1.5; margin: 24px 0 0; text-align: center; }
-.back-presentation { border: 1px solid var(--line); color: var(--blue-deep); display: block; font-size: 11px; font-weight: 700; margin: 18px auto 0; padding: 10px 14px; text-align: center; text-decoration: none; width: fit-content; }
-.back-presentation:hover { text-decoration: underline; text-underline-offset: 3px; }
+.back-presentation { align-items: center; border: 1px solid var(--line); color: var(--blue-deep); display: flex; font-size: 11px; font-weight: 700; gap: 8px; justify-content: center; margin: 20px auto 0; padding: 10px 15px; text-align: center; text-decoration: none; transition: border-color .2s, background .2s; width: fit-content; }
+.back-presentation svg { fill: none; height: 15px; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; width: 15px; }
+.back-presentation:hover { background: var(--blue-soft); border-color: var(--blue-deep); }
 .mobile-brand { display: none; }
 @media (max-width: 820px) {
   .login-shell { display: block; }
