@@ -69,10 +69,16 @@
               <svg id="themeIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z" /></svg>
               <span id="themeLabel">Claro</span>
             </button>
-            <button class="icon-button" type="button" aria-label="Notificações">
-              <svg class="notification-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4" /></svg>
-              <span class="notification-dot" aria-hidden="true"></span>
-            </button>
+            <div class="notification-wrap">
+              <button class="icon-button" id="notificationButton" type="button" aria-label="Notificações" aria-expanded="false" aria-controls="notificationPanel">
+                <svg class="notification-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4" /></svg>
+                <span class="notification-dot" id="notificationDot" aria-hidden="true" hidden></span>
+              </button>
+              <div class="notification-panel" id="notificationPanel" role="status" aria-live="polite" tabindex="-1" hidden>
+                <strong id="notificationStatus">Aguardando dados</strong>
+                <p id="notificationMessage">Registre duas leituras para receber um resumo do consumo.</p>
+              </div>
+            </div>
             <button
               class="avatar"
               id="logoutButton"
@@ -110,32 +116,34 @@
               <span class="eyebrow">Resumo do período</span>
               <h2 id="summary-title">Como estamos indo</h2>
             </div>
-            <span class="period-label">Últimos 6 meses <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></span>
+            <span class="period-label">Últimos 6 intervalos</span>
           </div>
+
+          <p class="metric-method-note">Estimativa proporcional aos dias entre leituras (pressupõe consumo uniforme); medições mais frequentes aumentam a precisão.</p>
 
           <div class="metric-grid">
             <article class="metric-card featured">
               <div class="metric-icon blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 17h16M6 17V9l6-4 6 4v8M9 17v-4h6v4" /></svg></div>
-              <span class="metric-label">Consumo no mês</span>
-              <strong id="currentConsumption">— <small>m³</small></strong>
+              <span class="metric-label">Ritmo mensal estimado</span>
+              <strong id="currentConsumption">— <small>m³/mês</small></strong>
               <span class="metric-change positive" id="consumptionChange"
                 >Aguardando registros</span
               >
             </article>
             <article class="metric-card">
               <div class="metric-icon green" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v16M7 9l5-5 5 5M7 15l5 5 5-5" /></svg></div>
-              <span class="metric-label">Média da residência</span>
-              <strong id="averageConsumption">— <small>m³</small></strong>
+              <span class="metric-label">Média mensal estimada</span>
+              <strong id="averageConsumption">— <small>m³/mês</small></strong>
               <span class="metric-change neutral"
-                >será calculada após os registros</span
+                >ponderada pelo tempo entre leituras</span
               >
             </article>
             <article class="metric-card">
               <div class="metric-icon amber" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 16h14M7 12h10M9 8h6" /></svg></div>
-              <span class="metric-label">Economia acumulada</span>
+              <span class="metric-label">Economia estimada</span>
               <strong id="savedConsumption">— <small>m³</small></strong>
               <span class="metric-change positive"
-                >será calculada após os registros</span
+                >vs. referência de 15 m³/mês</span
               >
             </article>
             <article class="metric-card alert-card" id="alertMetric">
@@ -154,9 +162,9 @@
             <div class="panel-heading">
               <div>
                 <span class="eyebrow">Acompanhe sua evolução</span>
-                <h2 id="chart-title">Consumo mensal</h2>
+                <h2 id="chart-title">Ritmo mensal estimado</h2>
               </div>
-              <span class="chart-unit">m³</span>
+              <span class="chart-unit">m³/mês</span>
             </div>
             <div class="chart-wrap">
               <div class="chart-y-labels" aria-hidden="true">
@@ -168,7 +176,7 @@
                 class="consumption-chart"
                 viewBox="0 0 640 260"
                 role="img"
-                aria-label="Gráfico de consumo mensal"
+                aria-label="Gráfico do ritmo mensal estimado"
               ></svg>
               <div
                 id="chartLabels"
@@ -177,15 +185,16 @@
               ></div>
             </div>
             <div class="chart-legend">
-              <span class="legend-dot"></span> Seu consumo
-              <span class="legend-average"></span> Média recomendada: 15 m³/mês
+              <span class="legend-dot"></span> Ritmo estimado
+              <span class="legend-average"></span>
+              <span id="chartReferenceLabel">Média recomendada: 15 m³/mês</span>
             </div>
           </article>
 
           <article class="panel insight-panel" aria-labelledby="insight-title">
             <div class="panel-heading">
               <div>
-                <span class="eyebrow">Leitura do mês</span>
+                <span class="eyebrow">Comparação de consumo</span>
                 <h2 id="insight-title">Uma boa evolução</h2>
               </div>
               <span class="insight-spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 16l5-5 4 3 7-7" /></svg></span>
@@ -231,7 +240,7 @@
                   <tr>
                     <th>Período</th>
                     <th>Leitura</th>
-                    <th>Consumo</th>
+                    <th>Consumo do intervalo</th>
                     <th>Situação</th>
                   </tr>
                 </thead>

@@ -30,6 +30,12 @@ else
   fail_check 'Firebase Hosting sem cabeçalhos de segurança esperados'
 fi
 
+if grep -q '"key": "Cache-Control"' firebase.json && grep -q 'no-cache, max-age=0, must-revalidate' firebase.json; then
+  pass_check 'HTML, CSS e JavaScript exigem revalidação após deploy'
+else
+  fail_check 'Firebase Hosting pode manter assets antigos em cache'
+fi
+
 if npm audit --omit=dev --audit-level=high >/tmp/gota-npm-audit 2>&1; then
   pass_check 'npm audit sem vulnerabilidades altas ou críticas'
 else
@@ -41,6 +47,14 @@ if [[ -n "$LIVE_URL" ]]; then
   headers="$(curl -fsSI "$LIVE_URL")" || { fail_check "site público acessível em $LIVE_URL"; headers=''; }
   for header in X-Content-Type-Options X-Frame-Options Referrer-Policy Permissions-Policy Strict-Transport-Security Content-Security-Policy; do
     if grep -qi "^$header:" <<<"$headers"; then pass_check "header público $header"; else fail_check "header público ausente: $header"; fi
+  done
+  for path in /dashboard /styles.css /dashboard-theme.js; do
+    asset_headers="$(curl -fsSI "${LIVE_URL%/}$path")" || asset_headers=''
+    if grep -qiE '^cache-control:.*(no-cache|max-age=0)' <<<"$asset_headers"; then
+      pass_check "asset público revalida após deploy: $path"
+    else
+      fail_check "asset público pode servir versão desatualizada: $path"
+    fi
   done
   for path in /.env /firebase-adminsdk.json /serviceAccount.json /package.json /server.js /firestore.rules; do
     status="$(curl -sS -o /dev/null -w '%{http_code}' "${LIVE_URL%/}$path")"
