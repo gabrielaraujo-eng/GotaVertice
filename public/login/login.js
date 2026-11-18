@@ -1,6 +1,7 @@
 import {
   loginAccount,
   loginWithGoogle,
+  recoverPassword,
   registerAccount,
   watchAuth,
 } from "../firebase.js";
@@ -31,6 +32,7 @@ function friendlyError(error) {
     "auth/weak-password": "A senha precisa ter pelo menos oito caracteres.",
     "auth/too-many-requests":
       "Muitas tentativas. Aguarde um pouco e tente novamente.",
+    "auth/invalid-action-code": "Este link de recuperação não é mais válido.",
   };
   return (
     messages[error.code] ||
@@ -101,9 +103,26 @@ document.querySelector("#togglePassword").addEventListener("click", (event) => {
   );
 });
 
-document.querySelector("#forgotPassword").addEventListener("click", (event) => {
+document.querySelector("#forgotPassword").addEventListener("click", async (event) => {
   event.preventDefault();
-  setFeedback("A recuperação de senha será adicionada em uma próxima etapa.");
+  const userEmail = email.value.trim().toLowerCase();
+  if (!userEmail)
+    return setFeedback("Informe seu e-mail para receber o link de recuperação.");
+  if (!email.checkValidity())
+    return setFeedback("Informe um e-mail válido para continuar.");
+
+  setFeedback("Enviando o link de recuperação...", "success");
+  try {
+    await recoverPassword(userEmail);
+    setFeedback(
+      "Se existir uma conta com este e-mail, você receberá um link para criar uma nova senha.",
+      "success",
+    );
+  } catch (error) {
+    if (error.code === "auth/invalid-email")
+      return setFeedback("Informe um e-mail válido para continuar.");
+    setFeedback("Não foi possível enviar o link agora. Tente novamente em instantes.");
+  }
 });
 
 document.querySelector("#googleButton").addEventListener("click", async () => {
