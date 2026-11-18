@@ -3,9 +3,9 @@ User-agent: *
 Allow: /
 Allow: /apresentacao/
 Allow: /login/
+Allow: /dashboard
 Allow: /privacidade/
 Allow: /cookies/
-Disallow: /dashboard
 Disallow: /app
 Disallow: /api/
 

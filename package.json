@@ -7,7 +7,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/consumption.test.js tests/dashboard-theme.test.js tests/dashboard-version.test.js tests/theme-contrast.test.js tests/server.test.js",
+    "test": "node --test tests/consumption.test.js tests/dashboard-theme.test.js tests/dashboard-version.test.js tests/theme-contrast.test.js tests/seo.test.js tests/server.test.js",
     "test:browser": "python3 scripts/dashboard-browser-test.py",
     "dev": "node server.js",
     "start": "node server.js",
