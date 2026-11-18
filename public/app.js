@@ -229,20 +229,29 @@ $("#residenceSelector")?.addEventListener("change", async (event) => {
   }
 });
 
-$("#newResidenceButton")?.addEventListener("click", async () => {
-  const name = window.prompt("Nome da nova residência:");
-  if (!name?.trim()) return;
-  const residents = Number(window.prompt("Número de moradores:", "1"));
+const residenceDialog = $("#newResidenceDialog");
+$("#newResidenceButton")?.addEventListener("click", () => {
+  $("#newResidenceName").value = "";
+  $("#newResidenceResidents").value = "1";
+  residenceDialog.showModal();
+  $("#newResidenceName").focus();
+});
+$("#closeResidenceDialog")?.addEventListener("click", () => residenceDialog.close());
+$("#cancelResidenceDialog")?.addEventListener("click", () => residenceDialog.close());
+$("#newResidenceForm")?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const name = $("#newResidenceName").value.trim();
+  const residents = Number($("#newResidenceResidents").value);
+  if (!name) return;
   try {
-    refresh(
-      await createResidence(currentUser, {
-        name: name.trim(),
-        residents: Math.min(30, Math.max(1, residents || 1)),
-      }),
-    );
+    refresh(await createResidence(currentUser, {
+      name,
+      residents: Math.min(30, Math.max(1, residents || 1)),
+    }));
+    residenceDialog.close();
     showToast("Nova residência criada.");
   } catch {
-    showToast("Não foi possível criar a residência.");
+    showToast("Não foi possível criar a residência. Verifique sua conexão.");
   }
 });
 
