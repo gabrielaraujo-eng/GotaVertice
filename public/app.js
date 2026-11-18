@@ -142,9 +142,7 @@ function renderChart() {
         `<circle class="chart-point ${index === coords.length - 1 ? "current" : ""}" cx="${point.x}" cy="${point.y}" r="${index === coords.length - 1 ? 5 : 4}"><title>${formatNumber(point.value)} m³ em ${point.label}</title></circle>`,
     )
     .join("");
-  chart.innerHTML = points.length
-    ? `${grid}<line class="chart-average-line" x1="0" y1="${averageY}" x2="${width}" y2="${averageY}" /><polygon class="chart-area" points="${area}"/><polyline class="chart-line" points="${line}"/>${dots}`
-    : '<text class="chart-empty" x="320" y="112" text-anchor="middle">Registre duas leituras para visualizar a evolução</text>';
+  chart.innerHTML = `${grid}<line class="chart-average-line" x1="0" y1="${averageY}" x2="${width}" y2="${averageY}" /><text class="chart-average-label" x="636" y="${Math.max(14, averageY - 7)}" text-anchor="end">15 m³/mês</text>${points.length ? `<polygon class="chart-area" points="${area}"/><polyline class="chart-line" points="${line}"/>${dots}` : '<text class="chart-empty" x="320" y="112" text-anchor="middle">Registre duas leituras para visualizar a evolução</text>'}`;
   labels.innerHTML = coords
     .map((point) => `<span>${point.label}</span>`)
     .join("");

@@ -202,7 +202,9 @@ export async function saveResidence(user, residenceId, residence) {
 }
 
 export async function createResidence(user, residence) {
-  const residenceId = crypto.randomUUID();
+  const residenceId = typeof globalThis.crypto?.randomUUID === "function"
+    ? globalThis.crypto.randomUUID()
+    : `residence-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   await setDoc(residenceRef(user, residenceId), {
     ...residence,
     createdAt: serverTimestamp(),
