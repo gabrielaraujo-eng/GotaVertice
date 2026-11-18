@@ -267,6 +267,16 @@ function setFormFeedback(message, type = "error") {
   feedback.textContent = message;
   feedback.dataset.type = type;
 }
+function notifyFormSaved(detail) {
+  document.dispatchEvent(new CustomEvent("gotavertice:form-saved", { detail }));
+}
+function setFormPending(form, pending) {
+  if (pending) form.setAttribute("aria-busy", "true");
+  else form.removeAttribute("aria-busy");
+  form.querySelectorAll("input, select, textarea, button").forEach((field) => {
+    field.disabled = pending;
+  });
+}
 function refresh(data) {
   state = data;
   render();
@@ -275,34 +285,41 @@ function refresh(data) {
 $("#readingDate").value = toLocalDateInput();
 $("#readingForm").addEventListener("submit", async (event) => {
   event.preventDefault();
+  const form = event.currentTarget;
   const date = $("#readingDate").value;
   const meter = Number($("#meterReading").value);
   if (!date || !Number.isFinite(meter) || meter < 0)
     return setFormFeedback("Informe uma data e uma leitura válida.");
+  const sorted = getSortedReadings(state.readings);
+  const previous = sorted.filter((item) => item.date < date).at(-1);
+  const next = sorted.find((item) => item.date > date);
+  if (previous && meter < previous.meter)
+    return setFormFeedback(
+      `A leitura precisa ser igual ou maior que ${previous.meter} m³.`,
+    );
+  if (next && meter > next.meter)
+    return setFormFeedback(
+      `A leitura precisa ser igual ou menor que ${next.meter} m³.`,
+    );
+  setFormPending(form, true);
   try {
-    const sorted = getSortedReadings(state.readings);
-    const previous = sorted.filter((item) => item.date < date).at(-1);
-    const next = sorted.find((item) => item.date > date);
-    if (previous && meter < previous.meter)
-      return setFormFeedback(
-        `A leitura precisa ser igual ou maior que ${previous.meter} m³.`,
-      );
-    if (next && meter > next.meter)
-      return setFormFeedback(
-        `A leitura precisa ser igual ou menor que ${next.meter} m³.`,
-      );
     refresh(await saveReading(currentUser, state.residenceId, { date, meter }));
     event.target.reset();
     $("#readingDate").value = toLocalDateInput();
     setFormFeedback("Leitura salva com sucesso.", "success");
+    notifyFormSaved({ formId: "readingForm" });
     showToast("Nova leitura registrada.");
   } catch {
     setFormFeedback("Não foi possível salvar. Verifique sua conexão.");
+  } finally {
+    setFormPending(form, false);
   }
 });
 
 $("#residenceForm").addEventListener("submit", async (event) => {
   event.preventDefault();
+  const form = event.currentTarget;
+  setFormPending(form, true);
   try {
     refresh(
       await saveResidence(currentUser, state.residenceId, {
@@ -313,18 +330,26 @@ $("#residenceForm").addEventListener("submit", async (event) => {
         ),
       }),
     );
+    notifyFormSaved({ formId: "residenceForm" });
     showToast("Dados da residência atualizados.");
   } catch {
     showToast("Não foi possível atualizar a residência.");
+  } finally {
+    setFormPending(form, false);
   }
 });
 
 $("#residenceSelector")?.addEventListener("change", async (event) => {
+  const selector = event.currentTarget;
+  selector.disabled = true;
   try {
-    refresh(await switchResidence(currentUser, event.target.value));
+    refresh(await switchResidence(currentUser, selector.value));
+    notifyFormSaved({ fieldId: "residenceSelector" });
     showToast("Residência alterada.");
   } catch {
     showToast("Não foi possível alterar a residência.");
+  } finally {
+    selector.disabled = false;
   }
 });
 
@@ -339,18 +364,23 @@ $("#closeResidenceDialog")?.addEventListener("click", () => residenceDialog.clos
 $("#cancelResidenceDialog")?.addEventListener("click", () => residenceDialog.close());
 $("#newResidenceForm")?.addEventListener("submit", async (event) => {
   event.preventDefault();
+  const form = event.currentTarget;
   const name = $("#newResidenceName").value.trim();
   const residents = Number($("#newResidenceResidents").value);
   if (!name) return;
+  setFormPending(form, true);
   try {
     refresh(await createResidence(currentUser, {
       name,
       residents: Math.min(30, Math.max(1, residents || 1)),
     }));
     residenceDialog.close();
+    notifyFormSaved({ formId: "newResidenceForm" });
     showToast("Nova residência criada.");
   } catch {
     showToast("Não foi possível criar a residência. Verifique sua conexão.");
+  } finally {
+    setFormPending(form, false);
   }
 });
 
@@ -456,15 +486,20 @@ $("#logoutAccountButton")?.addEventListener("click", async () => {
 
 $("#profileForm")?.addEventListener("submit", async (event) => {
   event.preventDefault();
+  const form = event.currentTarget;
   const displayName = $("#profileName").value.trim();
   if (displayName.length < 2)
     return showToast("Informe um nome com pelo menos dois caracteres.");
+  setFormPending(form, true);
   try {
     await updateUserProfile(currentUser, displayName);
     $("#accountName").textContent = displayName;
+    notifyFormSaved({ formId: "profileForm" });
     showToast("Perfil atualizado com sucesso.");
   } catch {
     showToast("Não foi possível atualizar o perfil.");
+  } finally {
+    setFormPending(form, false);
   }
 });
 
