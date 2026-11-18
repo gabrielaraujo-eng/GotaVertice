@@ -94,9 +94,7 @@
               Registre as leituras do hidrômetro e veja como o consumo muda ao
               longo do tempo.
             </p>
-            <a class="primary-button" href="#leituras"
-              >Registrar nova leitura <span>→</span></a
-            >
+            <a class="primary-button" href="#leituras">Registrar nova leitura <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
           </div>
           <div class="hero-water" aria-hidden="true">
             <div class="water-drop" aria-hidden="true"></div>
@@ -111,7 +109,7 @@
               <span class="eyebrow">Resumo do período</span>
               <h2 id="summary-title">Como estamos indo</h2>
             </div>
-            <span class="period-label">Últimos 6 meses <span>⌄</span></span>
+            <span class="period-label">Últimos 6 meses <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></span>
           </div>
 
           <div class="metric-grid">
@@ -221,7 +219,7 @@
                 <span class="eyebrow">Registros recentes</span>
                 <h2 id="readings-title">Histórico de leituras</h2>
               </div>
-              <a class="text-link" href="#leituras">Ver tudo →</a>
+              <a class="text-link" href="#leituras">Ver tudo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
             </div>
             <div class="table-wrap">
               <table>
@@ -269,7 +267,7 @@
                 required
               />
               <button class="primary-button full" type="submit">
-                Salvar leitura <span>→</span>
+                Salvar leitura <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
               </button>
               <p
                 class="form-feedback"
@@ -298,7 +296,7 @@
             <div>
               <select id="residenceSelector" aria-label="Selecionar residência"></select>
               <button class="text-button" id="newResidenceButton" type="button">
-                + Nova residência
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg> Nova residência
               </button>
             </div>
           </div>
@@ -359,7 +357,7 @@
           </div>
           <div class="residence-actions" aria-label="Gerenciamento dos dados">
             <button class="text-button" id="exportDataButton" type="button">
-              ⇩ Exportar meus dados
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M5 20h14" /></svg> Exportar meus dados
             </button>
             <button
               class="text-button danger"
@@ -393,6 +391,16 @@
       </main>
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <dialog class="residence-dialog" id="newResidenceDialog">
+      <form id="newResidenceForm" method="dialog">
+        <div class="dialog-heading"><div><span class="eyebrow">Nova configuração</span><h2>Adicionar residência</h2></div><button class="dialog-close" id="closeResidenceDialog" type="button" aria-label="Fechar">×</button></div>
+        <label for="newResidenceName">Nome da residência</label>
+        <input id="newResidenceName" type="text" maxlength="80" placeholder="Ex.: Casa da praia" required />
+        <label for="newResidenceResidents">Número de moradores</label>
+        <input id="newResidenceResidents" type="number" min="1" max="30" value="1" required />
+        <div class="dialog-actions"><button class="text-button" id="cancelResidenceDialog" type="button">Cancelar</button><button class="secondary-button" type="submit">Criar residência</button></div>
+      </form>
+    </dialog>
     <script src="consumption.js"></script>
     <script type="module" src="app.js"></script>
   </body>

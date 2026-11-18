@@ -1409,3 +1409,29 @@ input {
 :root[data-theme="light"] .chart-grid-line { stroke: #dce8e4; }
 :root[data-theme="light"] .chart-average-line { stroke: #76a995; }
 :root[data-theme="light"] .toast { background: #1c3b35; color: #f4fffb; }
+.primary-button svg,
+.text-link svg,
+.text-button svg,
+.period-label svg,
+.secondary-button svg {
+  fill: none;
+  height: 15px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+  width: 15px;
+}
+.text-link { align-items: center; display: inline-flex; gap: 5px; }
+.period-label { align-items: center; display: inline-flex; gap: 6px; }
+.period-label svg { height: 13px; width: 13px; }
+.text-button { align-items: center; display: inline-flex; gap: 6px; }
+.residence-dialog { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; color: var(--ink); max-width: 430px; padding: 25px; width: calc(100% - 32px); }
+.residence-dialog::backdrop { background: rgba(7, 19, 20, .68); }
+.residence-dialog form { display: flex; flex-direction: column; gap: 9px; }
+.dialog-heading { align-items: flex-start; display: flex; justify-content: space-between; margin-bottom: 10px; }
+.dialog-heading h2 { margin: 5px 0 0; }
+.dialog-close { background: transparent; border: 0; color: var(--muted); cursor: pointer; font-size: 24px; line-height: 1; padding: 0 4px; }
+.dialog-close:hover { color: var(--ink); }
+.dialog-actions { align-items: center; display: flex; justify-content: flex-end; gap: 12px; margin-top: 9px; }
+.dialog-actions .secondary-button { padding: 11px 15px; }
