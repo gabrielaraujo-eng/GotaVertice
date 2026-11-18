@@ -50,6 +50,28 @@ test('landing tem title, description e termos de busca claros no HTML inicial', 
   assert.ok(metaContent('name', 'google-site-verification').length > 20);
 });
 
+test('landing explica entrada manual, intervalos, estimativas, alertas e controles reais', () => {
+  assert.match(landing, /Registre manualmente as leituras do hidrômetro/i);
+  assert.match(landing, /Duas leituras em datas diferentes formam o primeiro intervalo/i);
+  assert.match(landing, /Três leituras válidas permitem comparar dois intervalos/i);
+  assert.match(landing, /aumenta mais de 20% em relação ao intervalo válido anterior/i);
+  assert.match(landing, /limite interno configurado de 18 m³\/mês/i);
+  assert.match(landing, /não diagnosticam vazamentos nem identificam a causa/i);
+  assert.match(landing, /exportar residência e leituras em JSON, limpar os dados da residência ou excluir a conta/i);
+  assert.match(landing, /não monitora em tempo real/i);
+  assert.match(landing, /não se integra às concessionárias ou às faturas/i);
+  assert.doesNotMatch(landing, /economia garantida|garante.{0,30}economia|reduz.{0,30}a conta/i);
+
+  const questions = [...landing.matchAll(/<summary\b/gi)];
+  assert.equal(questions.length, 7, 'a FAQ cobre as dúvidas principais em controles nativos acessíveis');
+  assert.match(landing, /href=["']#como-funciona["']/i);
+  assert.match(landing, /href=["']#faq["']/i);
+  assert.match(landing, /id=["']como-funciona["']/i);
+  assert.match(landing, /id=["']faq["']/i);
+  assert.match(landing, /href=["']\/privacidade\/["']/i);
+  assert.match(landing, /href=["']\/cookies\/["']/i);
+});
+
 test('canonical, Open Graph e Twitter usam a URL pública e imagem social reais', () => {
   const canonicalTag = /<link\b[^>]*\brel=["']canonical["'][^>]*>/i.exec(landing)?.[0];
   assert.ok(canonicalTag, 'canonical precisa existir no HTML inicial');
