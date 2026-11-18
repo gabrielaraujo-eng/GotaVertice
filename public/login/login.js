@@ -17,10 +17,35 @@ const submitButton = document.querySelector("#submitButton");
 const accountNote = document.querySelector("#accountNote");
 const initialMode = new URLSearchParams(window.location.search).get("mode");
 let mode = initialMode === "register" ? "register" : "login";
-
+let failedAttempts = 0;
+let blockedUntil = 0;
+let cooldownTimer = null;
 function setFeedback(message, type = "error") {
   feedback.textContent = message;
   feedback.className = `form-feedback ${type}`;
+}
+function renderSubmitButton() {
+  submitButton.innerHTML = mode === "register"
+    ? "Criar conta <span>→</span>"
+    : "Entrar <span>→</span>";
+}
+function startCooldown(seconds) {
+  blockedUntil = Date.now() + seconds * 1000;
+  submitButton.disabled = true;
+  window.clearInterval(cooldownTimer);
+  const update = () => {
+    const remaining = Math.ceil((blockedUntil - Date.now()) / 1000);
+    if (remaining <= 0) {
+      window.clearInterval(cooldownTimer);
+      submitButton.disabled = false;
+      renderSubmitButton();
+      setFeedback("");
+      return;
+    }
+    submitButton.textContent = `Aguarde ${remaining}s`;
+  };
+  update();
+  cooldownTimer = window.setInterval(update, 1000);
 }
 
 function friendlyError(error) {
@@ -51,9 +76,7 @@ function renderMode() {
   password.placeholder = registering
     ? "Crie uma senha com 8 caracteres"
     : "Digite sua senha";
-  submitButton.innerHTML = registering
-    ? "Criar conta <span>→</span>"
-    : "Entrar <span>→</span>";
+  renderSubmitButton();
   accountNote.innerHTML = registering
     ? 'Já possui uma conta? <a href="#" id="modeToggle">Entrar agora</a>'
     : 'Ainda não possui uma conta? <a href="#" id="modeToggle">Criar minha conta</a>';
@@ -70,6 +93,9 @@ watchAuth((user) => {
 });
 
 async function submitCredentials() {
+  const remaining = Math.ceil((blockedUntil - Date.now()) / 1000);
+  if (remaining > 0)
+    return setFeedback(`Aguarde ${remaining}s antes de tentar novamente.`);
   const userEmail = email.value.trim().toLowerCase();
   const userPassword = password.value;
   if (!userEmail || !userPassword)
@@ -83,8 +109,21 @@ async function submitCredentials() {
   try {
     if (mode === "register") await registerAccount(userEmail, userPassword);
     else await loginAccount(userEmail, userPassword);
+    failedAttempts = 0;
     window.location.replace("/dashboard");
   } catch (error) {
+    if (error.code === "auth/too-many-requests") {
+      startCooldown(60);
+      return setFeedback("Muitas tentativas. Aguarde um minuto e tente novamente.");
+    }
+    if (error.code === "auth/invalid-credential") {
+      failedAttempts += 1;
+      if (failedAttempts >= 3) {
+        failedAttempts = 0;
+        startCooldown(20);
+        return setFeedback("Muitas tentativas inválidas. Aguarde 20 segundos.");
+      }
+    }
     setFeedback(friendlyError(error));
   }
 }

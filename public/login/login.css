@@ -46,6 +46,7 @@ input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(73,169,191,.
 .primary-button { align-items: center; border: 0; border-radius: 2px; cursor: pointer; display: inline-flex; font: inherit; font-size: 12px; font-weight: 700; justify-content: center; min-height: 45px; transition: .2s ease; width: 100%; }
 .primary-button { background: #f8d78f; color: #2b4c52; gap: 13px; }
 .primary-button:hover { background: #ffe2a4; transform: translateY(-2px); }
+.primary-button:disabled { cursor: wait; opacity: .62; transform: none; }
 .primary-button span { font-size: 18px; }
 .social-divider { align-items: center; color: #8ba1a4; display: flex; font-size: 11px; gap: 10px; margin: 18px 0 12px; }
 .social-divider::before, .social-divider::after { background: #dce7e7; content: ""; flex: 1; height: 1px; }
