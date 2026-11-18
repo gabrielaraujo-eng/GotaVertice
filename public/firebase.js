@@ -48,6 +48,7 @@ export function watchAuth(callback) {
 export async function ensureUserProfile(user) {
   const reference = doc(db, "users", user.uid);
   const snapshot = await getDoc(reference);
+  const data = snapshot.exists() ? snapshot.data() : {};
   const profile = {
     email: user.email || "",
     displayName: user.displayName || "",
@@ -59,6 +60,7 @@ export async function ensureUserProfile(user) {
     profile.residence = { name: "Minha residência", residents: 1 };
   }
   await setDoc(reference, profile, { merge: true });
+  await migrateLegacyResidence(user, { ...data, ...profile });
 }
 
 export async function registerAccount(email, password) {
@@ -113,18 +115,76 @@ function userRef(user) {
   return doc(db, "users", user.uid);
 }
 
-function readingsRef(user) {
-  return collection(userRef(user), "readings");
+function residencesRef(user) {
+  return collection(userRef(user), "residences");
 }
 
-export async function loadUserData(user) {
-  const [userSnapshot, readingsSnapshot] = await Promise.all([
+function residenceRef(user, residenceId) {
+  return doc(residencesRef(user), residenceId);
+}
+
+function readingsRef(user, residenceId) {
+  return collection(residenceRef(user, residenceId), "readings");
+}
+
+async function migrateLegacyResidence(user, profileData) {
+  const residencesSnapshot = await getDocs(residencesRef(user));
+  if (!residencesSnapshot.empty) {
+    if (!profileData.activeResidenceId)
+      await setDoc(userRef(user), {
+        activeResidenceId: residencesSnapshot.docs[0].id,
+      }, { merge: true });
+    return;
+  }
+
+  const legacyReadings = await getDocs(
+    query(collection(userRef(user), "readings"), orderBy("date")),
+  );
+  const batch = writeBatch(db);
+  batch.set(
+    residenceRef(user, "default"),
+    {
+      ...(profileData.residence || { name: "Minha residência", residents: 1 }),
+      createdAt: profileData.createdAt || serverTimestamp(),
+      migratedAt: serverTimestamp(),
+    },
+    { merge: true },
+  );
+  legacyReadings.docs.forEach((item) =>
+    batch.set(doc(readingsRef(user, "default"), item.id), item.data(), {
+      merge: true,
+    }),
+  );
+  batch.set(userRef(user), { activeResidenceId: "default" }, { merge: true });
+  await batch.commit();
+}
+
+export async function loadUserData(user, residenceId = "") {
+  const [userSnapshot, residencesSnapshot] = await Promise.all([
     getDoc(userRef(user)),
-    getDocs(query(readingsRef(user), orderBy("date"))),
+    getDocs(residencesRef(user)),
   ]);
   const data = userSnapshot.exists() ? userSnapshot.data() : {};
+  const residences = residencesSnapshot.docs.map((item) => ({
+    id: item.id,
+    name: item.data().name || "Minha residência",
+    residents: Number(item.data().residents) || 1,
+  }));
+  const activeId = residenceId || data.activeResidenceId || residences[0]?.id || "default";
+  const [activeResidence, readingsSnapshot] = await Promise.all([
+    getDoc(residenceRef(user, activeId)),
+    getDocs(query(readingsRef(user, activeId), orderBy("date"))),
+  ]);
+  const activeData = activeResidence.exists()
+    ? activeResidence.data()
+    : { name: "Minha residência", residents: 1 };
   return {
-    residence: data.residence || { name: "Minha residência", residents: 1 },
+    residenceId: activeId,
+    residences,
+    residence: {
+      name: activeData.name || "Minha residência",
+      residents: Number(activeData.residents) || 1,
+    },
     readings: readingsSnapshot.docs.map((item) => ({
       date: item.data().date,
       meter: Number(item.data().meter),
@@ -132,18 +192,33 @@ export async function loadUserData(user) {
   };
 }
 
-export async function saveResidence(user, residence) {
+export async function saveResidence(user, residenceId, residence) {
   await setDoc(
-    userRef(user),
-    { email: user.email, residence },
+    residenceRef(user, residenceId),
+    residence,
     { merge: true },
   );
-  return loadUserData(user);
+  return loadUserData(user, residenceId);
 }
 
-export async function saveReading(user, reading) {
+export async function createResidence(user, residence) {
+  const residenceId = crypto.randomUUID();
+  await setDoc(residenceRef(user, residenceId), {
+    ...residence,
+    createdAt: serverTimestamp(),
+  });
+  await setDoc(userRef(user), { activeResidenceId: residenceId }, { merge: true });
+  return loadUserData(user, residenceId);
+}
+
+export function switchResidence(user, residenceId) {
+  return setDoc(userRef(user), { activeResidenceId: residenceId }, { merge: true })
+    .then(() => loadUserData(user, residenceId));
+}
+
+export async function saveReading(user, residenceId, reading) {
   await setDoc(
-    doc(readingsRef(user), reading.date),
+    doc(readingsRef(user, residenceId), reading.date),
     {
       date: reading.date,
       meter: reading.meter,
@@ -151,29 +226,34 @@ export async function saveReading(user, reading) {
     },
     { merge: true },
   );
-  return loadUserData(user);
+  return loadUserData(user, residenceId);
 }
 
-export async function clearUserData(user) {
-  const snapshot = await getDocs(readingsRef(user));
+export async function clearUserData(user, residenceId) {
+  const snapshot = await getDocs(readingsRef(user, residenceId));
   const batch = writeBatch(db);
   snapshot.docs.forEach((item) => batch.delete(item.ref));
   batch.set(
-    userRef(user),
-    {
-      email: user.email,
-      residence: { name: "Minha residência", residents: 1 },
-    },
+    residenceRef(user, residenceId),
+    { name: "Minha residência", residents: 1 },
     { merge: true },
   );
   await batch.commit();
-  return loadUserData(user);
+  return loadUserData(user, residenceId);
 }
 
 export async function deleteAccount(user) {
-  const snapshot = await getDocs(readingsRef(user));
+  const residencesSnapshot = await getDocs(residencesRef(user));
   const batch = writeBatch(db);
-  snapshot.docs.forEach((item) => batch.delete(item.ref));
+  for (const residence of residencesSnapshot.docs) {
+    const readingsSnapshot = await getDocs(
+      collection(residence.ref, "readings"),
+    );
+    readingsSnapshot.docs.forEach((item) => batch.delete(item.ref));
+    batch.delete(residence.ref);
+  }
+  const legacyReadings = await getDocs(collection(userRef(user), "readings"));
+  legacyReadings.docs.forEach((item) => batch.delete(item.ref));
   batch.delete(userRef(user));
   await batch.commit();
   await deleteUser(user);

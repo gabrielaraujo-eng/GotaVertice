@@ -25,6 +25,7 @@ Depois de criar uma conta, a pessoa pode:
 - entrar com e-mail/senha ou Google;
 - solicitar recuperação de senha por e-mail;
 - editar o nome de exibição do próprio perfil;
+- acompanhar várias residências na mesma conta, alternando a residência ativa;
 - sair da conta e encerrar a sessão;
 - excluir a conta e os dados da nuvem após confirmação explícita e reautenticação recente.
 
@@ -155,6 +156,8 @@ A rota `GET /healthz` responde com o estado do serviço e pode ser usada por uma
 
 O banco local é ignorado pelo Git. O arquivo `data/.gitkeep` mantém a pasta no repositório, mas nenhum dado pessoal é enviado para o GitHub.
 
+Cada conta pode ter várias residências. Os dados publicados ficam em `users/{uid}/residences/{residenceId}` e as leituras em uma subcoleção da residência ativa. No primeiro acesso depois desta mudança, a residência e as leituras do modelo antigo são migradas automaticamente para a residência padrão, sem misturar dados entre contas.
+
 ## API principal
 
 Todas as rotas abaixo, exceto `/healthz` e as rotas de autenticação, exigem uma sessão válida:
@@ -256,4 +259,4 @@ git diff --check
 
 ## Próximas evoluções
 
-As próximas melhorias naturais são múltiplas residências por conta, proteção contra tentativas repetidas de login, logs estruturados, monitoramento de custos e uma camada SaaS com organizações, planos e cobrança. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.
+As próximas melhorias naturais são proteção contra tentativas repetidas de login, logs estruturados, monitoramento de custos e uma camada SaaS com organizações, planos e cobrança. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.

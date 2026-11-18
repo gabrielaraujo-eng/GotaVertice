@@ -787,6 +787,28 @@ input:focus {
 .residence-panel {
   margin-top: 15px;
 }
+.residence-switcher {
+  margin-top: 19px;
+}
+.residence-switcher label {
+  display: block;
+}
+.residence-switcher > div {
+  align-items: center;
+  display: flex;
+  gap: 15px;
+}
+.residence-switcher select {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  min-height: 42px;
+  padding: 0 12px;
+  width: min(100%, 320px);
+}
 .residence-form {
   align-items: end;
   display: grid;
