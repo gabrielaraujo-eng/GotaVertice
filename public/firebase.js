@@ -12,6 +12,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateProfile,
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import {
   collection,
@@ -90,6 +91,12 @@ export function reauthenticateAccount(user, password = "") {
     return reauthenticateWithCredential(user, credential);
   }
   return reauthenticateWithPopup(user, new GoogleAuthProvider());
+}
+
+export async function updateUserProfile(user, displayName) {
+  await updateProfile(user, { displayName });
+  await setDoc(userRef(user), { displayName }, { merge: true });
+  return user;
 }
 
 export async function loginWithGoogle() {

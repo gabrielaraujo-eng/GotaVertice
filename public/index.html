@@ -310,10 +310,27 @@
               Atualizar dados
             </button>
           </form>
+          <form id="profileForm" class="residence-form">
+            <div>
+              <label for="profileName">Nome de exibição</label
+              ><input
+                id="profileName"
+                type="text"
+                maxlength="80"
+                autocomplete="name"
+                placeholder="Como devemos chamar você?"
+              />
+            </div>
+            <span aria-hidden="true"></span>
+            <button class="secondary-button" type="submit">
+              Salvar perfil
+            </button>
+          </form>
           <div class="account-row">
             <div>
               <span class="eyebrow">Conta conectada</span>
-              <strong id="accountEmail">Sua conta Firebase</strong>
+              <strong id="accountName">Sua conta GotaVértice</strong>
+              <span id="accountEmail">Sua conta Firebase</span>
             </div>
             <button
               class="secondary-button"
