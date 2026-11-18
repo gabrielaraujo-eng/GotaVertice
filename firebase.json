@@ -10,7 +10,7 @@
       {
         "source": "/",
         "destination": "/apresentacao/",
-        "type": 302
+        "type": 301
       }
     ],
     "rewrites": [
