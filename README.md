@@ -24,6 +24,7 @@ Depois de criar uma conta, a pessoa pode:
 - limpar os dados da residência com confirmação;
 - entrar com e-mail/senha ou Google;
 - solicitar recuperação de senha por e-mail;
+- editar o nome de exibição do próprio perfil;
 - sair da conta e encerrar a sessão;
 - excluir a conta e os dados da nuvem após confirmação explícita e reautenticação recente.
 
@@ -255,4 +256,4 @@ git diff --check
 
 ## Próximas evoluções
 
-As próximas melhorias naturais são edição de perfil, múltiplas residências por conta, proteção contra tentativas repetidas de login, logs estruturados, monitoramento de custos e uma camada SaaS com organizações, planos e cobrança. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.
+As próximas melhorias naturais são múltiplas residências por conta, proteção contra tentativas repetidas de login, logs estruturados, monitoramento de custos e uma camada SaaS com organizações, planos e cobrança. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.

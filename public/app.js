@@ -8,6 +8,7 @@ import {
   reauthenticateAccount,
   saveReading,
   saveResidence,
+  updateUserProfile,
   watchAuth,
 } from "./firebase.js";
 
@@ -286,9 +287,25 @@ $("#logoutAccountButton")?.addEventListener("click", async () => {
   window.location.replace("/login/");
 });
 
+$("#profileForm")?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const displayName = $("#profileName").value.trim();
+  if (displayName.length < 2)
+    return showToast("Informe um nome com pelo menos dois caracteres.");
+  try {
+    await updateUserProfile(currentUser, displayName);
+    $("#accountName").textContent = displayName;
+    showToast("Perfil atualizado com sucesso.");
+  } catch {
+    showToast("Não foi possível atualizar o perfil.");
+  }
+});
+
 watchAuth(async (user) => {
   if (!user) return window.location.replace("/login/");
   currentUser = user;
+  $("#profileName").value = user.displayName || "";
+  $("#accountName").textContent = user.displayName || "Sua conta GotaVértice";
   $("#accountEmail").textContent = user.email || "Conta Google";
   try {
     await ensureUserProfile(user);
