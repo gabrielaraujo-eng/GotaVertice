@@ -48,7 +48,7 @@ if [[ -n "$LIVE_URL" ]]; then
   for header in X-Content-Type-Options X-Frame-Options Referrer-Policy Permissions-Policy Strict-Transport-Security Content-Security-Policy; do
     if grep -qi "^$header:" <<<"$headers"; then pass_check "header público $header"; else fail_check "header público ausente: $header"; fi
   done
-  for path in /dashboard /styles.css /dashboard-theme.js; do
+  for path in /dashboard /styles.css /dashboard-theme.js /dashboard-version.js /app.js /consumption.js; do
     asset_headers="$(curl -fsSI "${LIVE_URL%/}$path")" || asset_headers=''
     if grep -qiE '^cache-control:.*(no-cache|max-age=0)' <<<"$asset_headers"; then
       pass_check "asset público revalida após deploy: $path"

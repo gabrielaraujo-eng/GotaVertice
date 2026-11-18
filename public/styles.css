@@ -41,7 +41,8 @@ a {
 }
 button:focus-visible,
 a:focus-visible,
-input:focus-visible {
+input:focus-visible,
+select:focus-visible {
   outline: 3px solid rgba(73, 169, 191, 0.45);
   outline-offset: 3px;
 }
@@ -990,14 +991,15 @@ input:focus {
     display: none;
   }
   .main-nav {
-    flex-direction: row;
-    gap: 3px;
-    justify-content: space-between;
+    display: grid;
+    gap: 6px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-top: 17px;
   }
   .nav-link {
     font-size: 10px;
     gap: 4px;
+    min-width: 0;
     padding: 9px 7px;
   }
   .nav-link span {
@@ -1133,7 +1135,7 @@ input {
   color: var(--ink);
 }
 input::placeholder {
-  color: #678287;
+  color: #7f979c;
 }
 input:focus {
   border-color: var(--blue);
@@ -1492,7 +1494,7 @@ input {
 :root[data-theme="light"] .page-footer { color: var(--ink-soft); }
 :root[data-theme="light"] input,
 :root[data-theme="light"] select { background: #ffffff; border-color: var(--line); color: var(--ink); }
-:root[data-theme="light"] input::placeholder { color: #6d7f79; }
+:root[data-theme="light"] input::placeholder { color: #60716c; }
 :root[data-theme="light"] input:focus,
 :root[data-theme="light"] select:focus { border-color: var(--accent); }
 :root[data-theme="light"] .insight-panel { background: #f1f9f6; }
@@ -1519,6 +1521,56 @@ input {
 .period-label { align-items: center; display: inline-flex; gap: 6px; }
 .period-label svg { height: 13px; width: 13px; }
 .text-button { align-items: center; display: inline-flex; gap: 6px; }
+.update-notice {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--accent-strong);
+  color: var(--ink);
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+}
+.update-notice[hidden] { display: none; }
+.update-notice p { color: var(--ink); font-size: 13px; line-height: 1.5; margin: 0; }
+.update-notice button {
+  background: var(--accent-strong);
+  border: 1px solid var(--accent-strong);
+  color: var(--surface);
+  cursor: pointer;
+  flex: 0 0 auto;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 9px 13px;
+}
+.update-notice button:hover { filter: brightness(1.08); }
+.update-notice button:focus-visible { outline-color: var(--accent-strong); }
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--surface) inset;
+  box-shadow: 0 0 0 1000px var(--surface) inset;
+  -webkit-text-fill-color: var(--ink);
+  caret-color: var(--ink);
+}
+input:focus,
+select:focus {
+  border-color: var(--accent-strong);
+  transition: none;
+}
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--accent-strong);
+  outline-offset: 3px;
+  transition: none;
+}
+@media (max-width: 560px) {
+  .update-notice { align-items: flex-start; flex-direction: column; }
+  .update-notice button { align-self: flex-start; }
+}
 .residence-dialog { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; color: var(--ink); max-width: 430px; padding: 25px; width: calc(100% - 32px); }
 .residence-dialog::backdrop { background: rgba(7, 19, 20, .68); }
 .residence-dialog form { display: flex; flex-direction: column; gap: 9px; }

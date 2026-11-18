@@ -53,6 +53,23 @@ test('tema claro redefine texto do hero e fundo de campos', () => {
   assert.match(css, /:root\[data-theme="light"\] input,[\s\S]*?:root\[data-theme="light"\] select\s*\{\s*background:\s*#ffffff;[^}]*color:\s*var\(--ink\);\s*\}/);
 });
 
+test('placeholders têm contraste WCAG AA em tema claro e escuro', () => {
+  const darkPlaceholder = /input::placeholder\s*\{\s*color:\s*(#[\da-f]{6})/i.exec(css)?.[1];
+  const lightPlaceholder = /:root\[data-theme="light"\] input::placeholder\s*\{\s*color:\s*(#[\da-f]{6})/i.exec(css)?.[1];
+  assert.ok(darkPlaceholder, 'placeholder escuro precisa ter cor explícita');
+  assert.ok(lightPlaceholder, 'placeholder claro precisa ter cor explícita');
+  assert.ok(contrastRatio('#11191b', darkPlaceholder) >= 4.5, 'placeholder escuro deve passar 4,5:1');
+  assert.ok(contrastRatio('#ffffff', lightPlaceholder) >= 4.5, 'placeholder claro deve passar 4,5:1');
+});
+
+test('campos mantêm autofill, foco de teclado e aviso de atualização legíveis', () => {
+  assert.match(css, /input:-webkit-autofill,[\s\S]*?-webkit-text-fill-color:\s*var\(--ink\);[\s\S]*?caret-color:\s*var\(--ink\);/);
+  assert.match(css, /input:focus,\s*select:focus\s*\{\s*border-color:\s*var\(--accent-strong\);\s*transition:\s*none;/);
+  assert.match(css, /input:focus-visible,\s*select:focus-visible\s*\{\s*outline:\s*3px solid var\(--accent-strong\);\s*outline-offset:\s*3px;\s*transition:\s*none;/);
+  assert.match(css, /update-notice\[hidden\]\s*\{\s*display:\s*none;\s*\}/);
+  assert.match(css, /\.update-notice\s*\{[^}]*background:\s*var\(--surface\);[^}]*color:\s*var\(--ink\);/s);
+});
+
 test('paleta clara mantém contraste em navegação e controles de período', () => {
   const lightRoot = getRootBlock(/:root\[data-theme="light"\]\s*\{([^}]*)\}/g);
   const navigationRatio = contrastRatio(

@@ -49,6 +49,22 @@ test('recusa dashboard sem sessão', async () => {
   assert.match(response.headers.get('x-request-id'), /^[0-9a-f-]{36}$/);
 });
 
+test('assets estáticos expõem Last-Modified para a checagem de versão com HEAD', async () => {
+  for (const route of ['/index.html', '/styles.css', '/dashboard-version.js']) {
+    const response = await request(route, { method: 'HEAD' });
+    assert.equal(response.status, 200, route);
+    assert.ok(Number.isFinite(Date.parse(response.headers.get('last-modified'))), route);
+    assert.equal(response.headers.get('cache-control'), 'no-cache', route);
+    assert.equal(await response.text(), '', `HEAD ${route} não deve retornar corpo`);
+  }
+});
+
+test('rota inexistente responde HEAD 404 sem corpo', async () => {
+  const response = await request('/rota-que-nao-existe', { method: 'HEAD' });
+  assert.equal(response.status, 404);
+  assert.equal(await response.text(), '');
+});
+
 test('cria uma conta e carrega a residência criada no servidor', async () => {
   const register = await request('/api/auth/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: userEmail, password: 'senha-segura' }) });
   assert.equal(register.status, 201);

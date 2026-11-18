@@ -189,15 +189,22 @@ const server = http.createServer(async (request, response) => {
   try {
     if (url.pathname.startsWith('/api/') || url.pathname === '/healthz') return await api(request, response, url);
     const file = safePublicPath(url.pathname);
-    if (!file || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
+    const fileStat = file && fs.existsSync(file) ? fs.statSync(file) : null;
+    if (!fileStat?.isFile()) {
       const notFound = path.join(PUBLIC, '404.html');
       if (fs.existsSync(notFound)) {
         response.writeHead(404, { 'Content-Type': mime(notFound), 'Cache-Control': 'no-cache' });
+        if (request.method === 'HEAD') return response.end();
         return fs.createReadStream(notFound).pipe(response);
       }
       return sendJson(response, 404, { error: 'Página não encontrada.' });
     }
-    response.writeHead(200, { 'Content-Type': mime(file), 'Cache-Control': 'no-cache' });
+    response.writeHead(200, {
+      'Content-Type': mime(file),
+      'Cache-Control': 'no-cache',
+      'Last-Modified': fileStat.mtime.toUTCString(),
+    });
+    if (request.method === 'HEAD') return response.end();
     fs.createReadStream(file).pipe(response);
   } catch (error) {
     log('error', 'http.request_error', {

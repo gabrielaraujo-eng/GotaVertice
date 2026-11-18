@@ -19,6 +19,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
     <script src="dashboard-theme.js" defer></script>
+    <script src="dashboard-version.js" defer></script>
     <meta name="google-site-verification" content="Fuv8SstZHaOSeGJXORd5tHSb6VJex7LBzuDKVyyIFco" />
   </head>
   <body>
@@ -91,6 +92,11 @@
             </button>
           </div>
         </header>
+
+        <div class="update-notice" id="updateNotice" role="status" aria-live="polite" aria-atomic="true" hidden>
+          <p>Há uma nova versão do GotaVértice. Recarregue a página para aplicar as atualizações.</p>
+          <button id="reloadForUpdate" type="button">Recarregar</button>
+        </div>
 
         <section class="hero-card" aria-labelledby="hero-title">
           <div class="hero-copy">
