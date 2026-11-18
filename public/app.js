@@ -1,5 +1,6 @@
 import {
   clearUserData,
+  createResidence,
   deleteAccount,
   ensureUserProfile,
   loadUserData,
@@ -8,11 +9,14 @@ import {
   reauthenticateAccount,
   saveReading,
   saveResidence,
+  switchResidence,
   updateUserProfile,
   watchAuth,
 } from "./firebase.js";
 
 const defaultState = {
+  residenceId: "default",
+  residences: [{ id: "default", name: "Minha residência", residents: 1 }],
   residence: { name: "Minha residência", residents: 1 },
   readings: [],
 };
@@ -41,6 +45,16 @@ function renderDashboardDate() {
     `Resumo de ${new Intl.DateTimeFormat("pt-BR", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date())}`;
 }
 function renderResidence() {
+  const selector = $("#residenceSelector");
+  selector.replaceChildren(
+    ...state.residences.map((residence) => {
+      const option = document.createElement("option");
+      option.value = residence.id;
+      option.textContent = residence.name;
+      return option;
+    }),
+  );
+  selector.value = state.residenceId;
   $("#sidebarResidence").textContent = state.residence.name;
   $("#sidebarResidents").textContent =
     `${state.residence.residents} ${state.residence.residents === 1 ? "morador" : "moradores"}`;
@@ -180,7 +194,7 @@ $("#readingForm").addEventListener("submit", async (event) => {
       return setFormFeedback(
         `A leitura precisa ser igual ou menor que ${next.meter} m³.`,
       );
-    refresh(await saveReading(currentUser, { date, meter }));
+    refresh(await saveReading(currentUser, state.residenceId, { date, meter }));
     event.target.reset();
     $("#readingDate").value = new Date().toISOString().slice(0, 10);
     setFormFeedback("Leitura salva com sucesso.", "success");
@@ -194,7 +208,7 @@ $("#residenceForm").addEventListener("submit", async (event) => {
   event.preventDefault();
   try {
     refresh(
-      await saveResidence(currentUser, {
+      await saveResidence(currentUser, state.residenceId, {
         name: $("#residenceName").value.trim() || "Minha residência",
         residents: Math.min(
           30,
@@ -208,9 +222,36 @@ $("#residenceForm").addEventListener("submit", async (event) => {
   }
 });
 
+$("#residenceSelector")?.addEventListener("change", async (event) => {
+  try {
+    refresh(await switchResidence(currentUser, event.target.value));
+    showToast("Residência alterada.");
+  } catch {
+    showToast("Não foi possível alterar a residência.");
+  }
+});
+
+$("#newResidenceButton")?.addEventListener("click", async () => {
+  const name = window.prompt("Nome da nova residência:");
+  if (!name?.trim()) return;
+  const residents = Number(window.prompt("Número de moradores:", "1"));
+  try {
+    refresh(
+      await createResidence(currentUser, {
+        name: name.trim(),
+        residents: Math.min(30, Math.max(1, residents || 1)),
+      }),
+    );
+    showToast("Nova residência criada.");
+  } catch {
+    showToast("Não foi possível criar a residência.");
+  }
+});
+
 $("#exportDataButton")?.addEventListener("click", () => {
   const payload = {
     exportedAt: new Date().toISOString(),
+    residenceId: state.residenceId,
     residence: state.residence,
     readings: getSortedReadings(state.readings),
   };
@@ -233,7 +274,7 @@ $("#clearDataButton")?.addEventListener("click", async () => {
   )
     return;
   try {
-    refresh(await clearUserData(currentUser));
+    refresh(await clearUserData(currentUser, state.residenceId));
     showToast("Dados da residência limpos.");
   } catch {
     showToast("Não foi possível limpar os dados.");
