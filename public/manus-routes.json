@@ -1,1 +1,1 @@
-{"routes":[{"path":"/","title":"Entrar | GotaVértice"},{"path":"/dashboard","title":"Dashboard | GotaVértice"}]}
+{"routes":[{"path":"/","title":"GotaVértice | Consumo de água e hidrômetro"},{"path":"/apresentacao/","title":"GotaVértice | Consumo de água e hidrômetro"},{"path":"/login/","title":"Entrar | GotaVértice"},{"path":"/dashboard","title":"Dashboard | GotaVértice"}]}

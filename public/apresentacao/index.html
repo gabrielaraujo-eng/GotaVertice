@@ -6,14 +6,43 @@
     <meta name="author" content="Gabriel Lucio — gabrielaraujo-eng" />
     <meta
       name="description"
-      content="GotaVértice: registre leituras do hidrômetro e acompanhe o consumo de água da sua residência."
+      content="Registre manualmente leituras do hidrômetro e acompanhe histórico, estimativas de consumo de água e alertas de variação com o GotaVértice."
     />
-    <link rel="icon" type="image/jpeg" href="/assets/github-avatar.png" />
+    <meta name="keywords" content="GotaVértice, Gota Vertice, GotaVertice, Goavertice, consumo de água, leitura de hidrômetro, monitoramento de consumo de água" />
+    <meta name="application-name" content="GotaVértice" />
+    <meta name="theme-color" content="#112e2a" />
+    <link rel="canonical" href="https://gotavertice-gj.web.app/apresentacao/" />
+    <link rel="icon" type="image/svg+xml" href="/assets/gotavertice-icon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="GotaVértice" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content="GotaVértice | Consumo de água e hidrômetro" />
+    <meta property="og:description" content="Registre manualmente leituras do hidrômetro e acompanhe histórico, estimativas de consumo de água e alertas de variação com o GotaVértice." />
+    <meta property="og:url" content="https://gotavertice-gj.web.app/apresentacao/" />
+    <meta property="og:image" content="https://gotavertice-gj.web.app/assets/gotavertice-social.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="675" />
+    <meta property="og:image:alt" content="Ilustração de uma gota d’água, uma casa e um hidrômetro em tons de verde." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="GotaVértice | Consumo de água e hidrômetro" />
+    <meta name="twitter:description" content="Registre manualmente leituras do hidrômetro e acompanhe histórico, estimativas de consumo de água e alertas de variação com o GotaVértice." />
+    <meta name="twitter:image" content="https://gotavertice-gj.web.app/assets/gotavertice-social.jpg" />
+    <meta name="twitter:image:alt" content="Ilustração de uma gota d’água, uma casa e um hidrômetro em tons de verde." />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
     />
-    <title>GotaVértice — acompanhamento de consumo</title>
+    <title>GotaVértice | Consumo de água e hidrômetro</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "GotaVértice",
+        "alternateName": ["Gota Vertice", "GotaVertice"],
+        "url": "https://gotavertice-gj.web.app/apresentacao/"
+      }
+    </script>
     <style>
       :root {
         --paper: #f3f0e9;
@@ -248,6 +277,54 @@
         margin: 0;
         max-width: 240px;
       }
+      .faq-link {
+        color: var(--muted);
+        font-size: 13px;
+        margin: 24px 0 0;
+      }
+      .faq-link a {
+        color: var(--green);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .faq {
+        border-top: 1px solid var(--line);
+        margin-top: 65px;
+        padding-top: 25px;
+      }
+      .faq h2 {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 24px;
+        margin: 0;
+      }
+      .faq-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 22px;
+      }
+      .faq details {
+        background: var(--green-soft);
+        border: 1px solid var(--line);
+        padding: 16px 18px;
+      }
+      .faq summary {
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
+      }
+      .faq details p {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.65;
+        margin: 12px 0 0;
+        max-width: 820px;
+      }
+      .faq details a {
+        color: var(--green);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
       .privacy {
         border-top: 1px solid var(--line);
         color: var(--muted);
@@ -296,6 +373,12 @@
         .steps {
           display: block;
         }
+        .faq {
+          margin-top: 50px;
+        }
+        .faq details {
+          padding: 14px;
+        }
         .step,
         .step:first-child {
           border-left: 0;
@@ -329,50 +412,84 @@
       <main>
         <section class="intro" aria-labelledby="intro-title">
           <div class="hero-copy">
-            <span class="kicker">Acompanhamento de consumo</span>
-            <h1 id="intro-title">Leituras da casa, <span>em ordem.</span></h1>
+            <span class="kicker">Monitoramento de consumo de água</span>
+            <h1 id="intro-title">Acompanhe o consumo <span>de água.</span></h1>
             <p>
-              O GotaVértice ajuda você a registrar as leituras do hidrômetro e
-              acompanhar o consumo de água da sua residência. Sem estimativa
-              inventada: os números do painel vêm dos registros que você
-              informar.
+              Registre manualmente as leituras do hidrômetro para acompanhar o
+              histórico, comparar intervalos e estimar o ritmo mensal. Os
+              resultados dependem dos dados informados e não substituem a leitura
+              oficial da concessionária.
             </p>
             <div class="actions">
               <a class="button primary" href="/login/?mode=register"
-                >Criar conta</a
-              ><a class="button secondary" href="/login/">Entrar</a>
+                >Comece a registrar</a
+              ><a class="button secondary" href="#como-funciona">Ver como funciona</a>
             </div>
           </div>
           <div class="hero-side">
             <div class="hero-art" aria-hidden="true">
               <span class="hero-art-label">Consciência em cada registro</span>
               <div class="hero-drop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3C9 7.5 6 10.8 6 14a6 6 0 0 0 12 0c0-3.2-3-6.5-6-11Z" /></svg></div>
-              <div class="hero-stat"><span>Leituras organizadas</span><strong>100%</strong></div>
+              <div class="hero-stat"><span>Leituras informadas por você</span><strong>Manuais</strong></div>
             </div>
             <aside class="note">
               <strong>Para que serve?</strong>
-              <p>Para manter um histórico simples das leituras, comparar períodos e perceber quando o consumo muda.</p>
+              <p>Para manter um histórico e notar variações. Os avisos não identificam a causa nem confirmam vazamentos.</p>
             </aside>
           </div>
         </section>
-        <section class="how" aria-labelledby="how-title">
+        <section class="how" id="como-funciona" aria-labelledby="how-title">
           <h2 id="how-title">Como funciona</h2>
           <div class="steps">
             <article class="step">
               <span class="step-number">01</span>
-              <h3>Cadastre a residência</h3>
-              <p>Informe um nome e a quantidade de moradores.</p>
+              <h3>Crie uma conta e cadastre a residência</h3>
+              <p>Informe um nome para organizar os registros da casa.</p>
             </article>
             <article class="step">
               <span class="step-number">02</span>
               <h3>Registre o hidrômetro</h3>
-              <p>Adicione a data e o valor mostrado no aparelho.</p>
+              <p>Digite a data e o valor mostrado no aparelho. Duas leituras em datas diferentes formam o primeiro intervalo.</p>
             </article>
             <article class="step">
               <span class="step-number">03</span>
               <h3>Consulte o histórico</h3>
-              <p>Veja a evolução e os intervalos entre as leituras.</p>
+              <p>Três leituras válidas permitem comparar dois intervalos. O ritmo mensal é uma estimativa que presume consumo uniforme entre registros.</p>
             </article>
+          </div>
+          <p class="faq-link">Veja também as <a href="#faq">perguntas frequentes</a>.</p>
+        </section>
+        <section class="faq" id="faq" aria-labelledby="faq-title">
+          <h2 id="faq-title">Perguntas frequentes</h2>
+          <div class="faq-list">
+            <details>
+              <summary>Como começo a usar o GotaVértice?</summary>
+              <p>Crie uma conta, cadastre a residência e informe manualmente a data e o valor exibido no hidrômetro. O aplicativo organiza os registros para você consultar depois.</p>
+            </details>
+            <details>
+              <summary>Quantas leituras preciso registrar?</summary>
+              <p>Duas leituras válidas em datas diferentes permitem calcular o primeiro intervalo. Para comparar um intervalo com o anterior, são necessárias três leituras válidas, que formam dois intervalos. Uma leitura isolada não mostra a evolução.</p>
+            </details>
+            <details>
+              <summary>Como o histórico calcula o ritmo mensal?</summary>
+              <p>O consumo do intervalo é a diferença entre leituras consecutivas. A estimativa mensal ajusta esse valor ao número de dias, supondo que o consumo foi uniforme entre os registros. É uma estimativa baseada no que você informou, não uma medição em tempo real nem uma fatura da concessionária.</p>
+            </details>
+            <details>
+              <summary>O que significa um alerta de variação?</summary>
+              <p>O alerta percentual indica quando o ritmo mensal estimado aumenta mais de 20% em relação ao intervalo válido anterior. O painel também pode sinalizar um ritmo mensal acima do limite interno configurado de 18 m³/mês ou a retomada após um intervalo estimado zerado. Esses avisos são sinais para conferir os registros e o contexto; não diagnosticam vazamentos nem identificam a causa.</p>
+            </details>
+            <details>
+              <summary>Como meus dados são tratados?</summary>
+              <p>Os registros ficam associados à sua conta nos serviços Firebase usados pelo aplicativo. Consulte a <a href="/privacidade/">política de privacidade</a> e a <a href="/cookies/">política de cookies</a> para ver os detalhes.</p>
+            </details>
+            <details>
+              <summary>Posso exportar ou apagar meus dados?</summary>
+              <p>Sim. No dashboard, você pode exportar residência e leituras em JSON, limpar os dados da residência ou excluir a conta, conforme as opções e confirmações exibidas.</p>
+            </details>
+            <details>
+              <summary>O hidrômetro é lido automaticamente?</summary>
+              <p>Não. As leituras são digitadas manualmente. O GotaVértice não monitora em tempo real e não se integra às concessionárias ou às faturas.</p>
+            </details>
           </div>
         </section>
         <p class="privacy">
