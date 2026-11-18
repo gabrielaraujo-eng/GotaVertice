@@ -46,6 +46,7 @@ test.after(() => {
 test('recusa dashboard sem sessão', async () => {
   const response = await request('/api/dashboard');
   assert.equal(response.status, 401);
+  assert.match(response.headers.get('x-request-id'), /^[0-9a-f-]{36}$/);
 });
 
 test('cria uma conta e carrega a residência criada no servidor', async () => {

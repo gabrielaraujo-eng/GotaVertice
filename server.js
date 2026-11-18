@@ -8,6 +8,17 @@ const PORT = Number(process.env.PORT || 4173);
 const ROOT = __dirname;
 const PUBLIC = path.join(ROOT, 'public');
 const DATA_DIR = path.join(ROOT, 'data');
+const LOG_LEVELS = { error: 0, warn: 1, info: 2, debug: 3 };
+const LOG_LEVEL = LOG_LEVELS[process.env.LOG_LEVEL] === undefined ? 'info' : process.env.LOG_LEVEL;
+function log(level, event, fields = {}) {
+  if (LOG_LEVELS[level] > LOG_LEVELS[LOG_LEVEL]) return;
+  console.log(JSON.stringify({
+    timestamp: new Date().toISOString(),
+    level,
+    event,
+    ...fields,
+  }));
+}
 fs.mkdirSync(DATA_DIR, { recursive: true });
 const db = new DatabaseSync(process.env.GOTAVERTICE_DB || path.join(DATA_DIR, 'gotavertice.sqlite'));
 db.exec(`
@@ -164,7 +175,17 @@ async function api(request, response, url) {
 }
 
 const server = http.createServer(async (request, response) => {
+  const startedAt = Date.now();
+  request.requestId = crypto.randomUUID();
+  response.setHeader('X-Request-Id', request.requestId);
   const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
+  response.once('finish', () => log('info', 'http.request', {
+    requestId: request.requestId,
+    method: request.method,
+    path: url.pathname,
+    status: response.statusCode,
+    durationMs: Date.now() - startedAt,
+  }));
   try {
     if (url.pathname.startsWith('/api/') || url.pathname === '/healthz') return await api(request, response, url);
     const file = safePublicPath(url.pathname);
@@ -179,8 +200,13 @@ const server = http.createServer(async (request, response) => {
     response.writeHead(200, { 'Content-Type': mime(file), 'Cache-Control': 'no-cache' });
     fs.createReadStream(file).pipe(response);
   } catch (error) {
-    console.error(error);
+    log('error', 'http.request_error', {
+      requestId: request.requestId,
+      method: request.method,
+      path: url.pathname,
+      error: error instanceof Error ? error.name : 'UnknownError',
+    });
     sendJson(response, 500, { error: 'Erro interno do servidor.' });
   }
 });
-server.listen(PORT, '0.0.0.0', () => console.log(`GotaVértice em http://localhost:${PORT}`));
+server.listen(PORT, '0.0.0.0', () => log('info', 'server.started', { port: PORT }));
