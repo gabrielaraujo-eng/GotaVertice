@@ -176,6 +176,8 @@ Todas as rotas abaixo, exceto `/healthz` e as rotas de autenticação, exigem um
 
 As senhas nunca são salvas em texto puro. O servidor usa `scrypt` para derivar um hash e armazena uma sessão aleatória em cookie `HttpOnly`. A API filtra cada consulta pelo usuário autenticado.
 
+O login publicado usa o Firebase Authentication, que aplica throttling no serviço quando detecta abuso. A interface também aplica um cooldown progressivo após falhas repetidas e respeita o erro `auth/too-many-requests`, evitando novas tentativas imediatas no navegador sem substituir a proteção do provedor.
+
 ## Privacidade, segurança e direitos do usuário
 
 A aplicação usa Firebase Authentication para contas e Cloud Firestore para residência e leituras. As regras do Firestore exigem autenticação e limitam o acesso ao próprio UID; dados de clientes não são versionados no GitHub. A configuração web do Firebase é pública por natureza, mas credenciais Admin SDK e chaves privadas são bloqueadas pelo `.gitignore`.
@@ -259,4 +261,4 @@ git diff --check
 
 ## Próximas evoluções
 
-As próximas melhorias naturais são proteção contra tentativas repetidas de login, logs estruturados, monitoramento de custos e uma camada SaaS com organizações, planos e cobrança. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.
+As próximas melhorias naturais são logs estruturados, monitoramento de custos e uma camada SaaS com organizações, planos e cobrança. Essas evoluções devem preservar o isolamento dos dados por usuário e a experiência simples do dashboard.
