@@ -21,7 +21,7 @@ a { color: inherit; text-decoration: none; }
 .brand, .mobile-brand { align-items: center; display: flex; font-family: "Space Grotesk", sans-serif; font-size: 19px; font-weight: 600; gap: 10px; position: relative; z-index: 2; }
 .brand strong, .mobile-brand strong { color: #a4e2c5; }
 .brand-mark { align-items: center; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.3); border-radius: 11px 11px 11px 3px; display: inline-flex; font-size: 25px; height: 38px; justify-content: center; transform: rotate(-14deg); width: 38px; }
-.brand-mark svg { fill: none; height: 22px; stroke: currentColor; stroke-width: 1.7; transform: rotate(14deg); width: 22px; }
+.brand-mark svg { fill: none; height: 22px; stroke: var(--blue); stroke-width: 1.7; transform: rotate(14deg); width: 22px; }
 .visual-copy { margin: auto 0; max-width: 475px; position: relative; z-index: 2; }
 .eyebrow { color: #83a0a4; display: block; font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
 .login-visual .eyebrow { color: #b9e4dd; }
