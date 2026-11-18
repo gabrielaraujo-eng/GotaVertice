@@ -4,6 +4,8 @@ import {
   ensureUserProfile,
   loadUserData,
   logoutAccount,
+  hasPasswordProvider,
+  reauthenticateAccount,
   saveReading,
   saveResidence,
   watchAuth,
@@ -243,12 +245,24 @@ $("#deleteAccountButton")?.addEventListener("click", async () => {
   );
   if (confirmation !== "EXCLUIR") return;
   try {
+    let password = "";
+    if (hasPasswordProvider(currentUser)) {
+      password = window.prompt(
+        "Por segurança, digite sua senha atual para confirmar a exclusão:",
+      );
+      if (!password) return;
+    }
+    await reauthenticateAccount(currentUser, password);
     await deleteAccount(currentUser);
     window.location.replace("/login/?deleted=1");
   } catch (error) {
+    if (error.code === "auth/invalid-credential")
+      return showToast("A senha informada está incorreta.");
+    if (error.code === "auth/popup-closed-by-user")
+      return showToast("A confirmação pelo Google foi cancelada.");
     if (error.code === "auth/requires-recent-login")
       showToast(
-        "Por segurança, saia e entre novamente antes de excluir a conta.",
+        "Não foi possível confirmar sua identidade. Entre novamente e tente outra vez.",
       );
     else showToast("Não foi possível excluir a conta. Tente novamente.");
   }
