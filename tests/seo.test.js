@@ -41,11 +41,7 @@ test('landing tem title, description e termos de busca claros no HTML inicial', 
   assert.match(description, /hidrômetro/i);
   assert.match(description, /consumo de água/i);
 
-  const keywords = metaContent('name', 'keywords').split(',').map((term) => term.trim().toLocaleLowerCase('pt-BR'));
-  assert.ok(keywords.length >= 3 && keywords.length <= 8);
-  assert.ok(keywords.includes('gotavértice'));
-  assert.ok(keywords.includes('goavertice'));
-  assert.ok(keywords.includes('leitura de hidrômetro'));
+  assert.equal(getMeta('name', 'keywords'), null, 'não incluir meta keywords obsoleta ou com grafias artificiais');
   assert.match(landing, /<h1\b[^>]*>Acompanhe o consumo\s*<span>de água\.<\/span><\/h1>/i);
   assert.ok(metaContent('name', 'google-site-verification').length > 20);
 });
